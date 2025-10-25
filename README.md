@@ -1,5 +1,4 @@
-this is my introduction website
+public introduction, portfolio, blog
 
-open source
-
-dont care if you steal it
+## License
+MIT License © 2025 faust504
