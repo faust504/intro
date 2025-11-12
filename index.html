@@ -1,1351 +1,2925 @@
 <!DOCTYPE html>
-<html lang="en">
+    <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>90icetea's uhh something</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet"/>
-<style>
-:root {
-    --bg: #1a1a1a;
-    --panel: #252525;
-    --muted: #8b8b8b;
-    --accent: #e0e0e0;
-    --border: #3a3a3a;
-    --card-bg: linear-gradient(#2f2f2f, #292929);
-    --transition: all 0.2s ease;
-}
-
-@keyframes moveGrid {
-    0% { background-position: 0 0; }
-    100% { background-position: 0 44px; }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-@keyframes bounceIn {
-    0% { transform: scale(0.8); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-/* @keyframes waveMove has been removed as it is no longer used */
-
-* { box-sizing: border-box; }
-
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-/* 1. Reverted: Main background is the animated grid */
-body {
-    font-family: 'Poppins', sans-serif;
-    background: #1a1a1a;
-    background-image:
-        linear-gradient(90deg, #333 1px, transparent 1px),
-        linear-gradient(#333 1px, transparent 1px);
-    background-size: 44px 44px;
-    animation: moveGrid 10s linear infinite;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    color: #e0e0e0;
-    -webkit-font-smoothing: antialiased;
-    position: relative;
-}
-
-.easter-egg {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    max-width: 400px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-}
-
-.easter-egg.show {
-    opacity: 1;
-    visibility: visible;
-    animation: bounceIn 0.5s ease;
-}
-
-.window {
-    width: 820px;
-    max-width: calc(100% - 40px);
-    height: 600px;
-    max-height: calc(100vh - 40px);
-    background: #252525;
-    border-radius: 14px;
-    border: 2px solid #3a3a3a;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    animation: fadeIn 0.4s ease;
-    transition: all 0.3s ease;
-}
-
-.window.minimized {
-    transform: scale(0.8);
-    opacity: 0;
-    pointer-events: none;
-}
-
-.window.maximized {
-    width: 100%;
-    height: 100vh;
-    max-width: 100%;
-    max-height: 100vh;
-    border-radius: 0;
-}
-
-.topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    background: linear-gradient(135deg, #2c2c2c, #252525);
-    border-bottom: 1px solid #3a3a3a;
-    flex-shrink: 0;
-}
-
-.window-controls {
-    display: flex;
-    gap: 8px;
-}
-
-.btn-circle {
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
-    border: 1px solid #3a3a3a;
-    background: #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    color: #999;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.btn-circle:hover {
-    background: #3a3a3a;
-    transform: scale(1.1);
-}
-
-.url {
-    flex: 1;
-    padding: 0 10px;
-}
-
-.url input {
-    width: 100%;
-    border-radius: 6px;
-    border: 1px solid #333;
-    padding: 8px 10px;
-    background: #1f1f1f;
-    font-size: 13px;
-    color: #e0e0e0;
-    font-family: 'Poppins', sans-serif;
-}
-
-.title-badge {
-    font-size: 12px;
-    color: #8b8b8b;
-    min-width: 40px;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.tabs {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #2c2c2c;
-    border-bottom: 1px solid #3a3a3a;
-    flex-shrink: 0;
-}
-
-.tab-list {
-    display: flex;
-    gap: 4px;
-    padding: 8px 12px;
-}
-
-.tab {
-    padding: 10px 18px;
-    font-weight: 600;
-    background: #222;
-    border-radius: 8px 8px 0 0;
-    border: 1px solid #3a3a3a;
-    border-bottom: none;
-    cursor: pointer;
-    color: #999;
-    font-family: 'Montserrat', sans-serif;
-    transition: var(--transition);
-    font-size: 14px;
-    box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2);
-    position: relative;
-}
-
-.tab:hover {
-    color: #fff;
-    background: #2a2a2a;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(0,0,0,0.2);
-}
-
-.tab.active {
-    background: linear-gradient(135deg, #3a3a3a, #333);
-    border-color: #4a4a4a;
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.1);
-    transform: translateY(0);
-}
-
-.tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #666, #999, #666);
-}
-
-.tab-right {
-    padding-right: 12px;
-    color: #8b8b8b;
-    font-size: 13px;
-}
-
-.tab-right span {
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.tab-right span:hover {
-    color: #fff;
-}
-
-.content {
-    flex: 1;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #333 #1a1a1a;
-    /* 2. Updated: Content background to aesthetic radial gradients */
-    background: #252525; /* Fallback for transparency/background color */
-    background-image:
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-        radial-gradient(circle at 0% 100%, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-        radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-    background-size: 30px 30px;
-}
-
-.content::-webkit-scrollbar { width: 10px; }
-.content::-webkit-scrollbar-track { background: #1a1a1a; }
-.content::-webkit-scrollbar-thumb { background: #333; border-radius: 6px; }
-
-.tab-content {
-    display: none;
-    padding: 14px;
-    min-height: 100%;
-}
-
-#main-tab { display: flex; gap: 14px; }
-
-.left {
-    width: 220px;
-    min-width: 180px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-.card {
-    background: linear-gradient(#2f2f2f, #292929);
-    border: 1px solid #3a3a3a;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: var(--transition);
-}
-
-.card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.image-box-card {
-    flex-grow: 0;
-    display: flex;
-    padding: 0;
-    overflow: hidden;
-    aspect-ratio: 3/4;
-}
-
-.image-box-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.image-box-card:hover .image-box-img {
-    transform: scale(1.05);
-}
-
-.small-h {
-    font-weight: 700;
-    color: #f0f0f0;
-    margin: 0 0 8px 0;
-    font-size: 14px;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.find-list {
-    counter-reset: item;
-    padding-left: 8px;
-    margin: 0;
-}
-
-.find-list li {
-    list-style: none;
-    padding: 8px 0;
-    border-bottom: 1px dashed #3a3a3a;
-    position: relative;
-    padding-left: 28px;
-    font-size: 14px;
-    transition: var(--transition);
-}
-
-.find-list li:last-child { border-bottom: none; }
-
-.find-list li:hover {
-    background: rgba(255,255,255,0.05);
-    padding-left: 32px;
-}
-
-.find-list li::before {
-    counter-increment: item;
-    content: counter(item) ".";
-    position: absolute;
-    left: 6px;
-    top: 8px;
-    color: #8b8b8b;
-    font-weight: 700;
-}
-
-.social-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #ddd;
-    text-decoration: none;
-    transition: var(--transition);
-    cursor: pointer;
-}
-
-.social-link:hover { color: #fff; }
-
-.social-icon {
-    width: 20px;
-    height: 20px;
-    transition: var(--transition);
-    filter: brightness(0) invert(1);
-    opacity: 0.7;
-}
-
-.social-link:hover .social-icon {
-    transform: scale(1.2) rotate(5deg);
-    opacity: 1;
-}
-
-.center {
-    flex: 1;
-    min-width: 340px;
-    display: flex;
-    flex-direction: column;
-}
-
-.avatar-row {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.avatar {
-    width: 110px;
-    height: 110px;
-    border-radius: 8px;
-    border: 1px solid #3a3a3a;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    flex-shrink: 0;
-    transition: var(--transition);
-}
-
-.avatar:hover {
-    transform: scale(1.05);
-}
-
-.avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.meta {
-    flex: 1;
-    padding: 6px 0;
-}
-
-.meta h2 {
-    margin: 0;
-    font-size: 18px;
-    font-family: 'Montserrat', sans-serif;
-    color: #fff;
-}
-
-.meta p {
-    margin: 6px 0;
-    color: #8b8b8b;
-    font-size: 13px;
-    line-height: 1.4;
-}
-
-.mood {
-    font-weight: 700;
-    margin-top: 8px;
-    color: #ddd;
-    font-size: 13px;
-    font-style: italic;
-}
-
-.playing {
-    margin-top: 12px;
-    border: 1px solid #3a3a3a;
-    padding: 12px;
-    border-radius: 8px;
-    position: relative;
-    overflow: hidden;
-    background: #1f1f1f;
-}
-
-.playing::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    /* NEW: Aesthetic angled line wave pattern */
-    background: repeating-radial-gradient(circle at 6.5% 25%, #1f1f1f 0 3px, #1b1b1b 3px 6px);
-    background-size: 100% 100%;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 1; 
-}
-
-/* 3. Removed: The playing-active animation CSS block is removed */
-/* .playing.playing-active::before { ... } */
-
-.playing > * {
-    position: relative;
-    z-index: 1;
-}
-
-.track {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 13px;
-}
-
-.record-art {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background-color: #444;
-    border: 1px solid #555;
-    flex-shrink: 0;
-    overflow: hidden;
-    transition: transform 0.1s linear;
-}
-
-.record-art.spinning {
-    animation: spin 3s linear infinite;
-}
-
-.record-art img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
-.playing-icon {
-    animation: pulse 1.5s ease-in-out infinite;
-}
-
-.track-info {
-    flex: 1;
-}
-
-.track-title {
-    font-weight: 600;
-    color: #ddd;
-}
-
-.track-artist {
-    font-size: 11px;
-    color: #8b8b8b;
-    margin-top: 2px;
-}
-
-.player-controls {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-top: 12px;
-}
-
-.play-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1px solid #3a3a3a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    background: linear-gradient(135deg, #3a3a3a, #2a2a2a);
-    color: #fff;
-    transition: var(--transition);
-}
-
-.play-btn:hover {
-    background: linear-gradient(135deg, #444, #333);
-    transform: scale(1.1);
-}
-
-.progress-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 10px;
-}
-
-.time {
-    font-size: 11px;
-    color: #8b8b8b;
-    width: 42px;
-    text-align: center;
-}
-
-input[type="range"] {
-    -webkit-appearance: none;
-    height: 6px;
-    background: #3a3a3a;
-    border-radius: 6px;
-    flex: 1;
-    cursor: pointer;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #fff;
-    cursor: grab;
-    transition: var(--transition);
-}
-
-input[type="range"]::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-}
-
-.media-row {
-    display: flex;
-    gap: 12px;
-    margin-top: 12px;
-    flex: 1;
-}
-
-.main-content-area {
-    display: flex;
-    gap: 12px;
-    flex: 1;
-}
-
-.panel-left {
-    flex: 1;
-    border: 1px solid #3a3a3a;
-    border-radius: 8px;
-    overflow: hidden;
-    background: linear-gradient(#2f2f2f, #292929);
-    display: flex;
-    flex-direction: column;
-    transition: var(--transition);
-}
-
-.panel-left:hover {
-    transform: translateY(-2px);
-}
-
-.image-placeholder {
-    aspect-ratio: 16/9;
-    background: #252525;
-    overflow: hidden;
-}
-
-.image-placeholder img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.panel-left:hover .image-placeholder img {
-    transform: scale(1.05);
-}
-
-.panel-right {
-    width: 220px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.info-box {
-    border: 1px solid #3a3a3a;
-    padding: 10px;
-    border-radius: 6px;
-    background: #2a2a2a;
-    flex: 1;
-    transition: var(--transition);
-}
-
-.info-box:hover {
-    background: #2d2d2d;
-    transform: translateX(4px);
-}
-
-.info-box h4 {
-    margin: 0 0 6px 0;
-    font-size: 13px;
-    font-family: 'Montserrat', sans-serif;
-    color: #f0f0f0;
-}
-
-.info-box p {
-    margin: 0;
-    font-size: 13px;
-    color: #ddd;
-    line-height: 1.4;
-}
-
-.note {
-    margin-top: 12px;
-    font-size: 13px;
-    color: #ddd;
-    border-top: 1px dashed #444;
-    padding-top: 10px;
-}
-
-.dninote {
-    font-size: 12px;
-    color: #8b8b8b;
-    margin-top: 8px;
-}
-
-.interests {
-    font-size: 13px;
-    color: #fff;
-    line-height: 1.6;
-}
-
-.portfolio-content {
-    display: none;
-    flex-direction: column;
-    padding: 10px;
-}
-
-.portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-    margin-top: 15px;
-}
-
-.portfolio-item {
-    background: #2a2a2a;
-    border: 1px solid #3a3a3a;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: var(--transition);
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-
-.portfolio-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-
-.portfolio-image {
-    aspect-ratio: 16/9;
-    border-bottom: 1px solid #3a3a3a;
-    background-size: cover;
-    background-position: center;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-}
-
-.portfolio-item:hover .portfolio-image {
-    transform: scale(1.1);
-}
-
-.portfolio-desc {
-    padding: 12px;
-    font-size: 13px;
-}
-
-.portfolio-desc h4 {
-    margin: 0 0 6px 0;
-    color: #f0f0f0;
-    font-size: 14px;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.portfolio-desc p {
-    color: #ccc;
-    margin: 0;
-}
-
-.history-content {
-    display: none;
-    flex-direction: column;
-    padding: 10px;
-}
-
-.history-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-    margin-top: 15px;
-}
-
-.history-item {
-    background: #2a2a2a;
-    border: 1px solid #3a3a3a;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: var(--transition);
-}
-
-.history-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-
-.history-image {
-    aspect-ratio: 16/9;
-    background-size: cover;
-    background-position: center;
-    border-bottom: 1px solid #3a3a3a;
-    transition: transform 0.3s ease;
-}
-
-.history-item:hover .history-image {
-    transform: scale(1.05);
-}
-
-.history-text {
-    padding: 16px;
-}
-
-.history-date {
-    color: #8b8b8b;
-    font-size: 12px;
-    margin-bottom: 8px;
-}
-
-.history-item h3 {
-    color: #f0f0f0;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
-    margin: 0 0 8px 0;
-}
-
-.history-item p {
-    color: #ccc;
-    font-size: 14px;
-    line-height: 1.6;
-    margin: 0;
-}
-
-.btn {
-    padding: 6px 12px;
-    border-radius: 6px;
-    border: 1px solid #3a3a3a;
-    background: linear-gradient(135deg, #333, #2a2a2a);
-    cursor: pointer;
-    font-size: 13px;
-    color: #ddd;
-    transition: var(--transition);
-    font-family: 'Poppins', sans-serif;
-}
-
-.btn:hover {
-    background: linear-gradient(135deg, #3a3a3a, #333);
-    transform: translateY(-2px);
-}
-
-.linklike {
-    color: #ddd;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.linklike:hover { color: #fff; }
-
-@media (max-width: 820px) {
-    body {
-        padding: 10px;
-    }
-    
-    .window {
-        width: 100%;
-        max-width: 100%;
-        height: 100vh;
-        max-height: 100vh;
-        border-radius: 8px;
-    }
-    
-    #main-tab { 
-        flex-direction: column; 
-    }
-    
-    .left { 
-        width: 100%; 
-        order: 2; 
-    }
-    
-    .center { 
-        width: 100%; 
-        min-width: auto; 
-        order: 1; 
-    }
-
-    .image-box-card {
-        width: 100%;
-        max-width: 100%;
-        margin-bottom: 12px; 
-    }
-    
-    .main-content-area { 
-        flex-direction: column; 
-    }
-    
-    .panel-right { 
-        width: 100%; 
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    
-    .info-box {
-        flex: 1;
-        min-width: 200px;
-    }
-    
-    .portfolio-grid { 
-        grid-template-columns: 1fr; 
-    }
-    
-    .avatar-row { 
-        flex-direction: column; 
-        text-align: center; 
-    }
-    
-    .avatar {
-        width: 90px;
-        height: 90px;
-    }
-    
-    .meta h2 {
-        font-size: 16px;
-    }
-    
-    .meta p {
-        font-size: 12px;
-    }
-    
-    .tabs {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .tab-list {
-        flex-wrap: nowrap;
-        min-width: min-content;
-    }
-    
-    .tab {
-        white-space: nowrap;
-        font-size: 13px;
-        padding: 8px 12px;
-    }
-    
-    .tab-right {
-        display: none;
-    }
-    
-    .topbar {
-        padding: 8px;
-    }
-    
-    .title-badge {
-        font-size: 11px;
-        min-width: 80px;
-    }
-    
-    .url input {
-        font-size: 11px;
-        padding: 6px 8px;
-    }
-    
-    .btn-circle {
-        width: 16px;
-        height: 16px;
-        font-size: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .window {
-        border-radius: 0;
-        border: none;
-    }
-    
-    body {
-        padding: 0;
-    }
-    
-    .content {
-        padding: 8px;
-    }
-    
-    .tab-content {
-        padding: 8px;
-    }
-    
-    .panel-right {
-        flex-direction: column;
-    }
-    
-    .info-box {
-        width: 100%;
-    }
-    
-    .player-controls {
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-    
-    .btn {
-        font-size: 12px;
-        padding: 5px 10px;
-    }
-    
-    .play-btn {
-        width: 32px;
-        height: 32px;
-    }
-    
-    .find-list li {
-        font-size: 13px;
-    }
-    
-    .card {
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-    
-    .small-h {
-        font-size: 13px;
-    }
-}
-</style>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>faust!</title>
+    <link rel="icon" 
+          type="image/png" 
+          href="https://static.wikia.nocookie.net/rage-guy/images/f/fa/718smiley.png/revision/latest?cb=20250316181146">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <style>
+        :root {
+            --bg: #1a1a1a;
+            --panel: #252525;
+            --music1: #1f1f1f;
+            --music2: #1b1b1b;
+            --muted: #8b8b8b;
+            --accent: #e0e0e0;
+            --border: #3a3a3a;
+            --card-bg: linear-gradient(#2f2f2f, #292929);
+            --transition: all 0.2s ease;
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f5f5;
+            --panel: #ffffff;
+            --music1: #f5f5f5;
+            --music2: #ffffff;
+            --muted: #666666;
+            --accent: #1a1a1a;
+            --border: #d0d0d0;
+            --card-bg: linear-gradient(#ffffff, #f8f8f8);
+        }
+
+        @keyframes moveGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 44px; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spinLoader {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        * { 
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            background-image:
+                linear-gradient(90deg, var(--border) 1px, transparent 1px),
+                linear-gradient(var(--border) 1px, transparent 1px);
+            background-size: 44px 44px;
+            animation: moveGrid 10s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--accent);
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            visibility: hidden;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spinLoader 1s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-size: 18px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .img-loading {
+            position: relative;
+            overflow: hidden;
+            background: var(--panel);
+        }
+
+        .img-loading::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        .img-loading img {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .img-loading.loaded::before {
+            display: none;
+        }
+
+        .img-loading.loaded img {
+            opacity: 1;
+        }
+
+        .theme-toggle-wrapper, .lang-toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-right: 12px;
+            border-right: 1px solid var(--border);
+            margin-right: 12px;
+        }
+
+        .theme-toggle, .lang-toggle {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--border);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .theme-toggle:hover, .lang-toggle:hover {
+            background: #4a4a4a;
+        }
+
+        .theme-toggle-slider, .lang-toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--panel);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--accent);
+            -webkit-user-select: none; /* Chrome, Safari, and Opera */
+            -moz-user-select: none;    /* Firefox */
+            -ms-user-select: none;     /* Internet Explorer/Edge */
+            user-select: none;
+        }
+
+        .theme-toggle-slider svg {
+            width: 12px;
+            height: 12px;
+            fill: var(--accent);
+        }
+
+        [data-theme="light"] .theme-toggle {
+            background: #ffd700;
+        }
+
+        [data-theme="light"] .theme-toggle-slider {
+            transform: translateX(24px);
+        }
+
+        [data-lang="id"] .lang-toggle {
+            background: #4a90e2;
+        }
+
+        [data-lang="id"] .lang-toggle-slider {
+            transform: translateX(24px);
+        }
+
+        .easter-egg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            max-width: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+
+        .easter-egg.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+        }
+
+        .window {
+            width: 820px;
+            max-width: calc(100% - 40px);
+            height: 600px;
+            max-height: calc(100vh - 40px);
+            background: var(--panel);
+            border-radius: 14px;
+            border: 2px solid var(--border);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease;
+            transition: all 0.3s ease;
+        }
+
+        .window.minimized {
+            transform: scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .window.maximized {
+            width: 100%;
+            height: 100vh;
+            max-width: 100%;
+            max-height: 100vh;
+            border-radius: 0;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: linear-gradient(135deg, var(--panel), var(--bg));
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-circle {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-circle:hover {
+            background: var(--border);
+            transform: scale(1.1);
+        }
+
+        .url {
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        .url input {
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            background: var(--bg);
+            font-size: 13px;
+            color: var(--accent);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .title-badge {
+            font-size: 12px;
+            color: var(--muted);
+            min-width: 40px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .tabs {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .tab-list {
+            display: flex;
+            gap: 4px;
+            padding: 8px 12px;
+        }
+
+        .tab {
+            padding: 10px 18px;
+            font-weight: 600;
+            background: var(--bg);
+            border-radius: 8px 8px 0 0;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            cursor: pointer;
+            color: var(--muted);
+            font-family: 'Montserrat', sans-serif;
+            transition: var(--transition);
+            font-size: 14px;
+            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .tab:hover {
+            color: var(--accent);
+            background: var(--panel);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(0,0,0,0.2);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, var(--panel), var(--bg));
+            border-color: var(--border);
+            color: var(--accent);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.1);
+            transform: translateY(0);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--muted), var(--accent), var(--muted));
+        }
+
+        .tab-right {
+            display: flex;
+            align-items: center;
+            padding-right: 12px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .tab-right span {
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tab-right span:hover {
+            color: var(--accent);
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) var(--bg);
+            background: var(--panel);
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(128, 128, 128, 0.06) 2px, transparent 1px),
+                radial-gradient(circle at 0% 100%, rgba(128, 128, 128, 0.04) 1px, transparent 1px),
+                radial-gradient(circle at 100% 0%, rgba(128, 128, 128, 0.04) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .content::-webkit-scrollbar { width: 10px; }
+        .content::-webkit-scrollbar-track { background: var(--bg); }
+        .content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+
+        .tab-content {
+            display: none;
+            padding: 14px;
+            min-height: 100%;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        #main-tab { display: flex; gap: 14px; }
+
+        .left {
+            width: 220px;
+            min-width: 180px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .image-box-card {
+            flex-grow: 0;
+            display: flex;
+            padding: 0;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+        }
+
+        .image-box-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .image-box-card:hover .image-box-img {
+            transform: scale(1.05);
+        }
+
+        .small-h {
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .find-list {
+            counter-reset: item;
+            padding-left: 8px;
+            margin: 0;
+        }
+
+        .find-list li {
+            list-style: none;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border);
+            position: relative;
+            padding-left: 28px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .find-list li:last-child { border-bottom: none; }
+
+        .find-list li:hover {
+            background: rgba(128,128,128,0.1);
+            padding-left: 32px;
+        }
+
+        .find-list li::before {
+            counter-increment: item;
+            content: counter(item) ".";
+            position: absolute;
+            left: 6px;
+            top: 8px;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .social-link:hover { 
+            color: var(--accent);
+            opacity: 0.8;
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            transition: var(--transition);
+            filter: brightness(0) invert(1);
+            opacity: 0.7;
+        }
+
+        [data-theme="light"] .social-icon {
+            filter: brightness(0);
+        }
+
+        .social-link:hover .social-icon {
+            transform: scale(1.2) rotate(5deg);
+            opacity: 1;
+        }
+
+        .center {
+            flex: 1;
+            min-width: 340px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .avatar-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .meta {
+            flex: 1;
+            padding: 6px 0;
+        }
+
+        .meta h2 {
+            margin: 0;
+            font-size: 18px;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--accent);
+        }
+
+        .meta p {
+            margin: 6px 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .mood {
+            font-weight: 700;
+            margin-top: 8px;
+            color: var(--accent);
+            font-size: 13px;
+            font-style: italic;
+        }
+
+        .playing {
+            margin-top: 12px;
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        .playing::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-radial-gradient(circle at calc(12px + 24px) 36px, var(--music1) 0 3px, var(--music2) 3px 6px);
+            background-size: 100% 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 1; 
+        }
+
+        .playing > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .track {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+        }
+
+        .record-art {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--border);
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .record-art.spinning {
+            animation: spin 3s linear infinite;
+        }
+
+        .record-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .track-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .track-title {
+            font-weight: 600;
+            color: var(--accent);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .track-artist {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .next-up {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--border);
+        }
+
+        .next-up strong {
+            color: var(--accent);
+        }
+
+        .player-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .play-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--border), var(--panel));
+            color: var(--accent);
+            transition: var(--transition);
+        }
+
+        .play-btn:hover {
+            background: linear-gradient(135deg, var(--panel), var(--border));
+            transform: scale(1.1);
+        }
+
+        .progress-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .time {
+            font-size: 11px;
+            color: var(--muted);
+            width: 42px;
+            text-align: center;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: var(--border);
+            border-radius: 6px;
+            flex: 1;
+            cursor: pointer;
+            outline: none;
+            transition: background 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: grab;
+            transition: var(--transition);
+            margin-top: -4px;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: grab;
+            transition: var(--transition);
+            border: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 6px;
+            border-radius: 6px;
+        }
+        input[type="range"]::-moz-range-track {
+            height: 6px;
+            border-radius: 6px;
+            border: none;
+        }
+
+        .media-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            flex: 1;
+        }
+
+        .main-content-area {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .panel-left {
+            flex: 1;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .panel-left:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            border-color: var(--accent);
+        }
+
+        .image-placeholder {
+            aspect-ratio: 16/9;
+            background: var(--panel);
+            overflow: hidden;
+        }
+
+        .image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .panel-left:hover .image-placeholder img {
+            transform: scale(1.05);
+        }
+
+        .panel-right {
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-box {
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 6px;
+            background: var(--bg);
+            flex: 1;
+            transition: var(--transition);
+        }
+
+        .info-box:hover {
+            background: var(--border);
+            transform: translateX(4px);
+        }
+
+        .info-box h4 {
+            margin: 0 0 6px 0;
+            font-size: 13px;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--accent);
+        }
+
+        .info-box p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--accent);
+            line-height: 1.4;
+        }
+
+        .note {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--accent);
+            border-top: 1px dashed var(--border);
+            padding-top: 10px;
+        }
+
+        .dninote {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        .interests {
+            font-size: 13px;
+            color: var(--accent);
+            line-height: 1.6;
+        }
+
+        .portfolio-content {
+            display: none;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        .portfolio-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .portfolio-image {
+            aspect-ratio: 16/9;
+            border-bottom: 1px solid var(--border);
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-item:hover .portfolio-image {
+            transform: scale(1.1);
+        }
+
+        .portfolio-desc {
+            padding: 12px;
+            font-size: 13px;
+        }
+
+        .portfolio-desc h4 {
+            margin: 0 0 6px 0;
+            color: var(--accent);
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .portfolio-desc p {
+            color: var(--muted);
+            margin: 0;
+        }
+
+        .blog-content {
+            display: none;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        .blog-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .blog-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .blog-image {
+            aspect-ratio: 16/9;
+            background-size: cover;
+            background-position: center;
+            border-bottom: 1px solid var(--border);
+            transition: transform 0.3s ease;
+        }
+
+        .blog-item:hover .blog-image {
+            transform: scale(1.05);
+        }
+
+        .blog-text {
+            padding: 16px;
+        }
+
+        .blog-date {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .blog-item h3 {
+            color: var(--accent);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            margin: 0 0 8px 0;
+        }
+
+        .blog-item p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .skills-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%; /* Makes the card horizontal */
+            transition: var(--transition);
+        }
+        
+        .skills-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .skills-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .skills-icon {
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .skills-header-text {
+            flex: 1;
+        }
+
+        .skills-title {
+            margin: 0;
+            color: var(--accent);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+        }
+
+        .skills-subtitle {
+            margin: 2px 0 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .skills-content {
+            display: flex;
+            flex-direction: column; /* Stack tags and proficiency */
+            gap: 20px;
+        }
+
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--accent);
+        }
+
+        .skills-proficiency {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .proficiency-item {
+            width: 100%;
+        }
+
+        .proficiency-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .proficiency-label {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .proficiency-value {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* REMOVED old proficiency-slider styles */
+        
+        /* ADDED new progress bar styles */
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: var(--border);
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 5px;
+            /* Added animation */
+            animation: fillProgressBar 1s ease-out forwards;
+            box-shadow: 0 0 5px rgba(255,255,255,0.3);
+        }
+
+        .blog-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .blog-modal.show {
+            display: flex;
+        }
+
+        .blog-modal-content {
+            background: var(--panel);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+            animation: fadeInUp 0.3s ease;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) var(--panel);
+        }
+
+        .blog-modal-content::-webkit-scrollbar { 
+            width: 10px; 
+        }
+        
+        .blog-modal-content::-webkit-scrollbar-track { 
+            background: transparent; 
+        }
+        
+        .blog-modal-content::-webkit-scrollbar-thumb { 
+            background: var(--border); 
+            border-radius: 6px; 
+            border: 2px solid var(--panel);
+        }
+
+        .blog-modal-content::-webkit-scrollbar-button,
+        .blog-modal-content::-webkit-scrollbar-corner {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        .blog-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--border);
+            border: none;
+            color: var(--accent);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .blog-modal-close:hover {
+            background: var(--accent);
+            color: var(--panel);
+            transform: scale(1.1);
+        }
+
+        .blog-modal-content h2 {
+            color: var(--accent);
+            font-family: 'Montserrat', sans-serif;
+            margin: 0 0 10px 0;
+        }
+
+        .blog-modal-content .blog-date {
+            margin-bottom: 20px;
+        }
+
+        .blog-modal-header-image {
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            aspect-ratio: 16/9;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #000;
+        }
+
+        .blog-modal-content .markdown-content {
+            color: var(--accent);
+            line-height: 1.8;
+        }
+
+        .markdown-content h1, .markdown-content h2, .markdown-content h3 {
+            margin-top: 24px;
+            margin-bottom: 12px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .markdown-content p {
+            margin-bottom: 16px;
+        }
+
+        .markdown-content code {
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .markdown-content pre {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        .markdown-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .markdown-content ul, .markdown-content ol {
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .markdown-content li {
+            margin-bottom: 8px;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid var(--border);
+            padding-left: 16px;
+            margin: 16px 0;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        .markdown-content a {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .markdown-content img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: linear-gradient(135deg, var(--border), var(--panel));
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--accent);
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, var(--panel), var(--border));
+            transform: translateY(-2px);
+        }
+
+        .linklike {
+            color: var(--accent);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .linklike:hover { 
+            color: var(--accent);
+            opacity: 0.8;
+        }
+
+        @media (max-width: 820px) {
+            body {
+                padding: 10px;
+            }
+            
+            .window {
+                width: 100%;
+                max-width: 100%;
+                height: 100vh;
+                max-height: 100vh;
+                border-radius: 8px;
+            }
+            
+            #main-tab { 
+                flex-direction: column; 
+            }
+            
+            .left { 
+                width: 100%; 
+                order: 2; 
+            }
+            
+            .center { 
+                width: 100%; 
+                min-width: auto; 
+                order: 1; 
+            }
+
+            .image-box-card {
+                width: 100%;
+                max-width: 100%;
+                margin-bottom: 12px; 
+            }
+            
+            .main-content-area { 
+                flex-direction: column; 
+            }
+            
+            .panel-right { 
+                width: 100%; 
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .info-box {
+                flex: 1;
+                min-width: 200px;
+            }
+            
+            .portfolio-grid { 
+                grid-template-columns: 1fr; 
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .avatar-row { 
+                flex-direction: column; 
+                text-align: center; 
+            }
+            
+            .avatar {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .meta h2 {
+                font-size: 16px;
+            }
+            
+            .meta p {
+                font-size: 12px;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .tab-list {
+                flex-wrap: nowrap;
+                min-width: min-content;
+            }
+            
+            .tab {
+                white-space: nowrap;
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+            
+            .theme-toggle-wrapper, .lang-toggle-wrapper {
+                padding-right: 8px;
+                margin-right: 8px;
+            }
+
+            .theme-toggle, .lang-toggle {
+                width: 45px;
+                height: 24px;
+            }
+
+            .theme-toggle-slider, .lang-toggle-slider {
+                width: 18px;
+                height: 18px;
+                -webkit-user-select: none; /* Chrome, Safari, and Opera */
+                -moz-user-select: none;    /* Firefox */
+                -ms-user-select: none;     /* Internet Explorer/Edge */
+                user-select: none;
+            }
+
+            [data-theme="light"] .theme-toggle-slider {
+                transform: translateX(21px);
+            }
+
+            [data-lang="id"] .lang-toggle-slider {
+                transform: translateX(21px);
+            }
+            
+            .topbar {
+                padding: 8px;
+            }
+            
+            .title-badge {
+                font-size: 11px;
+                min-width: 80px;
+            }
+            
+            .url input {
+                font-size: 11px;
+                padding: 6px 8px;
+            }
+            
+            .btn-circle {
+                width: 16px;
+                height: 16px;
+                font-size: 10px;
+            }
+
+            .blog-modal-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .window {
+                border-radius: 0;
+                border: none;
+            }
+            
+            body {
+                padding: 0;
+            }
+            
+            .content {
+                padding: 8px;
+            }
+            
+            .tab-content {
+                padding: 8px;
+            }
+            
+            .panel-right {
+                flex-direction: column;
+            }
+            
+            .info-box {
+                width: 100%;
+            }
+            
+            .player-controls {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            
+            .btn {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+            
+            .play-btn {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .find-list li {
+                font-size: 13px;
+            }
+            
+            .card {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            
+            .small-h {
+                font-size: 13px;
+            }
+
+            .blog-modal-content {
+                padding: 15px;
+                max-height: 85vh;
+            }
+        }
+    </style>
 </head>
-<body>
-<div class="easter-egg" id="easterEgg">
-<img src="https://i.pinimg.com/736x/8a/08/11/8a0811e8e381e8cbb4d49d7b890b3de5.jpg" alt="You found the secret!"/>
-</div>
-
-<div class="window" id="mainWindow">
-<div class="topbar">
-<div class="title-badge">‎   90icetea</div>
-<div class="url">
-<input readonly value="https://90icetea.github.io/intro"/>
-</div>
-<div class="window-controls">
-<div class="btn-circle" id="minimizeBtn" title="Minimize">−</div>
-<div class="btn-circle" id="maximizeBtn" title="Maximize">▢</div>
-<div class="btn-circle" id="closeBtn" title="Close">✕</div>
-</div>
-</div>
-<nav class="tabs">
-<div class="tab-list">
-<button class="tab active" data-tab="main">Main</button>
-<button class="tab" data-tab="portfolio">Portfolio</button>
-<button class="tab" data-tab="history">History</button>
-</div>
-<div class="tab-right">
-<span id="helpBtn">Help</span> | <span class="linklike" id="logoutBtn">Log Out</span>
-</div>
-</nav>
-<main class="content">
-<div class="tab-content" id="main-tab">
-<aside class="left">
-<div class="card">
-<h3 class="small-h">Socials</h3>
-<ol class="find-list">
-<li><a class="social-link" href="https://instagram.com/90icetea" target="_blank"><img class="social-icon" src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg" alt="Instagram"/>Instagram</a></li>
-<li><a class="social-link" href="https://github.com/90icetea" target="_blank"><img class="social-icon" src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub"/>Github</a></li>
-<li><a class="social-link" href="https://open.spotify.com/user/312vfpg3sgyhdfg4unxtmv4xudle" target="_blank"><img class="social-icon" src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/spotify.svg" alt="Spotify"/>Spotify</a></li>
-<li><span class="social-link" id="discordBtn"><img class="social-icon" src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/discord.svg" alt="Discord"/>Discord</span></li>
-</ol>
-</div>
-<div class="card">
-<h3 class="small-h">Interests</h3>
-<div class="interests">video editing, motion graphics, python, cybersecurity, linux, photography, visual design</div>
-</div>
-<div class="card image-box-card">
-<img loading="lazy" alt="aesthetic" src="https://i.ibb.co.com/BVJW0NvF/void.jpg" class="image-box-img"/>
-</div>
-</aside>
-<section class="center">
-<div class="avatar-row">
-<div class="avatar">
-<img loading="lazy" alt="90icetea profile" src="https://iili.io/FQKZeNp.webp"/>
-</div>
-<div class="meta">
-<h2>90icetea<small style="font-weight:600;color:#aaa"> • a.k.a rashya</small></h2>
-<p>pecintacybersecurity999 | fluent english and indonesian · currently interested in cybersecurity · i use arch btw</p>
-<div class="mood">"Cogito, ergo sum." -René Descartes</div>
-</div>
-</div>
-<div class="playing" id="playingBox">
-<div class="track">
-    <div class="record-art" id="recordArt">
-        <img loading="lazy" alt="Record Art" src="https://upload.wikimedia.org/wikipedia/en/9/96/TV_Girl_-_French_Exit.png"/>
-    </div>
-<div class="track-info">
-<div class="track-title">The Blonde</div>
-<div class="track-artist">TV Girl</div>
-</div>
-</div>
-<div class="player-controls">
-<button class="play-btn" id="playBtn">▶</button>
-<button class="btn" id="archiveBtn">Archive</button>
-<button class="btn" id="shareBtn">Share</button>
-<div style="flex:1"></div>
-<input id="audioFile" type="file" accept="audio/*" style="display:none"/>
-<button class="btn" id="loadBtn">Load audio</button>
-</div>
-<div class="progress-row">
-<div class="time" id="currentTime">00:00</div>
-<input type="range" id="progress" min="0" max="100" value="0"/>
-<div class="time" id="totalTime">00:00</div>
-</div>
-</div>
-<div class="media-row">
-<div class="main-content-area">
-<div class="panel-left">
-<div class="image-placeholder">
-<img loading="lazy" alt="Latest Update" src="https://i.ibb.co.com/HT6W861z/Screenshot-2025-10-23-at-14-25-17-90icetea-s-uhh-something.png"/>
-</div>
-<div style="padding:10px">
-<p style="margin:0;font-weight:700;color:#f0f0f0">Site Update <span style="font-weight:500;color:#8b8b8b">• October 23, 2025</span></p>
-<p style="margin-top:6px;color:#8b8b8b">updated the website a little bit, looks cooler, feels smoother, added more features, 0 bugs, faster performance.</p>
-</div>
-</div>
-<aside class="panel-right">
-<div class="info-box">
-<h4>Music</h4>
-<p>malcolm todd, the smiths, mac demarco, radiohead, tyler the creator, tv girl</p>
-</div>
-<div class="info-box">
-<h4>Visual Media</h4>
-<p>neon genesis evangelion, breaking bad, 500 days of summer, bladerunner 2049, fight club</p>
-</div>
-<div class="info-box">
-<h4>Games</h4>
-<p>minecraft, roblox, pubgm, free fire, chess, singleplayer story games.</p>
-</div>
-</aside>
-</div>
-</div>
-<div class="note">
-<strong>that's about it. i'm not really active on instagram, discord dms preferred for contacting. mostly online 10 hours a day.</strong>
-<div class="dninote"><strong>FYI:</strong> i didn't fully make this</div>
-</div>
-</section>
-</div>
-<div class="tab-content portfolio-content" id="portfolio-tab">
-<h2 style="margin:10px 0;font-size:20px;color:#f0f0f0;font-family:'Montserrat',sans-serif">My Projects</h2>
-<p style="color:#8b8b8b;margin:0 0 0 10px">  a collection of all of my (public) projects</p>
-<div class="portfolio-grid">
-<a href="https://www.roblox.com/catalog/92115969258782/batik-spega" target="_blank" class="portfolio-item">
-<div class="portfolio-image" style="background-image:url('https://i.ibb.co.com/YsmxWhM/Screenshot-2025-07-20-012806.png')"></div>
-<div class="portfolio-desc">
-<h4>School Uniform in Roblox</h4>
-<p>a replica of my school's batik uniform in Roblox, by editing photos of the irl uniform. made some robux from it.</p>
-</div>
-</a>
-<a href="https://www.roblox.com/games/118579241387230/forgotten" target="_blank" class="portfolio-item">
-<div class="portfolio-image" style="background-image:url('https://i.ibb.co.com/n8r2yZ5V/Screenshot-2025-08-13-010836.png')"></div>
-<div class="portfolio-desc">
-<h4>School Replica in Roblox</h4>
-<p>a decently accurate replica of my school remade in Roblox, using Roblox Studio (work in progress).</p>
-</div>
-</a>
-<a href="https://90icetea.github.io/intro/" target="_blank" class="portfolio-item">
-<div class="portfolio-image" style="background-image:url('https://i.ibb.co.com/HT6W861z/Screenshot-2025-10-23-at-14-25-17-90icetea-s-uhh-something.png')"></div>
-<div class="portfolio-desc">
-<h4>Personal Website</h4>
-<p>a smooth, unique, browser-window-style introduction, portfolio, and blog website for myself.</p>
-</div>
-
-</a>
-</div>
-</div>
-<div class="tab-content history-content" id="history-tab">
-<h2 style="margin:10px 0;font-size:20px;color:#f0f0f0;font-family:'Montserrat',sans-serif">Update History</h2>
-<p style="color:#8b8b8b;margin:0 0 15px 10px">  previous blog posts and updates on this site</p>
-
-<div class="history-grid"> <div class="history-item">
-    <div class="history-image" style="background-image:url('https://i.ibb.co.com/0yPZQxkk/Comp-1-2-3.gif')"></div>
-    <div class="history-text">
-    <div class="history-date">August 6, 2025</div>
-    <h3>After Effects Progress</h3>
-    <p>after effects emu otori edit remake timelapse in the gif above. had some fun learning switching from alight motion to after effects. turned out decent i guess.</p>
-    </div>
+<body data-lang="en">
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+        <div class="loading-text" data-translate="loading">Loading...</div>
     </div>
 
-
-    <div class="history-item">
-    <div class="history-image" style="background-image:url('https://i.ibb.co.com/YGxrRCt/Screenshot-2025-08-13-011058.png')"></div>
-    <div class="history-text">
-    <div class="history-date">August 13, 2025</div>
-    <h3>Site Launch</h3>
-    <p>launched my personal static website. it's both a blog site and a portfolio i guess (though not a professional one). still updating from time to time.
-    </div>
+    <div class="easter-egg" id="easterEgg">
+        <img src="https://i.pinimg.com/736x/8a/08/11/8a0811e8e381e8cbb4d49d7b890b3de5.jpg" alt="You found the secret!"/>
     </div>
 
-</div> </div>
-</main>
-</div>
+    <div class="window" id="mainWindow">
+        <div class="topbar">
+            <div class="title-badge">faust504</div>
+            <div class="url">
+                <input readonly value="https://faust504.github.io/intro"/>
+            </div>
+            <div class="window-controls">
+                <div class="btn-circle" id="minimizeBtn" title="Minimize">−</div>
+                <div class="btn-circle" id="maximizeBtn" title="Maximize">□</div>
+                <div class="btn-circle" id="closeBtn" title="Close">✕</div>
+            </div>
+        </div>
+        <nav class="tabs">
+            <div class="tab-list">
+                <button class="tab active" data-tab="main" data-translate="tab-main">Main</button>
+                <button class="tab" data-tab="portfolio" data-translate="tab-portfolio">Portfolio</button>
+                <button class="tab" data-tab="blog" data-translate="tab-blog">Blog</button>
+            </div>
+            <div class="tab-right">
+                <div class="lang-toggle-wrapper">
+                    <div class="lang-toggle" id="langToggle">
+                        <div class="lang-toggle-slider" id="langSlider">EN</div>
+                    </div>
+                </div>
+                <div class="theme-toggle-wrapper">
+                    <div class="theme-toggle" id="themeToggle">
+                        <div class="theme-toggle-slider">
+                            <svg id="themeIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <span id="helpBtn" data-translate="help">Help</span> | <span class="linklike" id="logoutBtn" data-translate="logout">Log Outs</span>
+            </div>
+        </nav>
+        <main class="content">
+            <div class="tab-content" id="main-tab">
+                <aside class="left">
+                    <div class="card">
+                        <h3 class="small-h" data-translate="socials-title">Socials</h3>
+                        <ol class="find-list">
+                            <li><a class="social-link" href="https://instagram.com/90icetea" target="_blank"><img class="social-icon" src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg" alt="Instagram"/>Instagram</a></li>
+                            <li><a class="social-link" href="https://github.com/faust504" target="_blank"><img class="social-icon" src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub"/>Github</a></li>
+                            <li><a class="social-link" href="https://open.spotify.com/user/312vfpg3sgyhdfg4unxtmv4xudle" target="_blank"><img class="social-icon" src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/spotify.svg" alt="Spotify"/>Spotify</a></li>
+                            <li><span class="social-link" id="discordBtn"><img class="social-icon" src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/discord.svg" alt="Discord"/>Discord</span></li>
+                        </ol>
+                    </div>
+                    <div class="card">
+                        <h3 class="small-h" data-translate="interests-title">Interests</h3>
+                        <div class="interests" data-translate="interests-text">video editing, motion graphics, python, cybersecurity, linux, photography, visual design</div>
+                    </div>
+                    <div class="card image-box-card img-loading">
+                        <img loading="lazy" alt="aesthetic" src="https://i.ibb.co.com/Y4cFt8x2/Screenshot-20251105-145844.png" class="image-box-img"/>
+                    </div>
+                </aside>
+                <section class="center">
+                    <div class="avatar-row">
+                        <a href="https://www.roblox.com/users/1003745284/profile">
+                            <div class="avatar img-loading">
+                                <img loading="lazy" alt="my pfp" src="https://iili.io/FQKZeNp.webp"/>
+                            </div>
+                        </a>
+                        <div class="meta">
+                            <h2>faust504<small style="font-weight:600;color:#aaa"> • <span data-translate="aka">a.k.a</span> rashya</small></h2>
+                            <p data-translate="bio">script kiddie | fluent english and indonesian · interest in cybersecurity (redteam) · i use arch btw</p>
+                            <div class="mood" data-translate="quote">"Cogito, ergo sum." -René Descartes</div>
+                        </div>
+                    </div>
+                    <div class="playing" id="playingBox">
+                        <div class="track">
+                            <div class="record-art img-loading" id="recordArt">
+                                <img loading="lazy" alt="Record Art" id="recordImg" src=""/>
+                            </div>
+                            <div class="track-info">
+                                <div class="track-title" id="trackTitle">Loading...</div>
+                                <div class="track-artist" id="trackArtist">Loading...</div>
+                            </div>
+                            <div class="player-controls">
+                                <button class="play-btn" id="prevBtn" title="Previous (←)">⮜</button>
+                                <button class="play-btn" id="playBtn" title="Play/Pause (Space)">▶</button>
+                                <button class="play-btn" id="nextBtn" title="Next (→)">⮞</button>
+                            </div>
+                        </div>
+                        <div class="next-up">
+                            <strong data-translate="next">Next:</strong> <span id="nextTrack">Loading...</span>
+                        </div>
+                        <div class="progress-row">
+                            <div class="time" id="currentTime">00:00</div>
+                            <input type="range" id="progress" min="0" max="100" value="0"/>
+                            <div class="time" id="totalTime">00:00</div>
+                        </div>
+                    </div>
+                    <div class="media-row">
+                        <div class="main-content-area">
+                            <div class="panel-left" data-blog="site-update" style="cursor: pointer;">
+                                <div class="image-placeholder img-loading">
+                                    <img loading="lazy" alt="Latest Update" src="https://i.ibb.co.com/z0DgjYD/image.png"/>
+                                </div>
+                                <div style="padding:10px">
+                                    <p style="margin:0;font-weight:700;color:var(--accent)"><span data-translate="site-update-title">Site Update</span> <span style="font-weight:500;color:var(--muted)">• <span data-translate="site-update-date">October 23, 2025</span></span></p>
+                                    <p style="margin-top:6px;color:var(--muted)" data-translate="site-update-desc">updated the website a little bit, looks cooler, feels smoother, added more features, 0 bugs, faster performance.</p>
+                                </div>
+                            </div>
+                            <aside class="panel-right">
+                                <div class="info-box">
+                                    <h4 data-translate="music-title">Music</h4>
+                                    <p data-translate="music-text">reality club, the smiths, mac demarco, radiohead, tyler the creator, tv girl</p>
+                                </div>
+                                <div class="info-box">
+                                    <h4 data-translate="media-title">Visual Media</h4>
+                                    <p data-translate="media-text">neon genesis evangelion, breaking bad, 500 days of summer, bladerunner 2049, fight club</p>
+                                </div>
+                                <div class="info-box">
+                                    <h4 data-translate="games-title">Games</h4>
+                                    <p data-translate="games-text">minecraft, roblox, pubgm, free fire, chess, singleplayer story games.</p>
+                                </div>
+                            </aside>
+                        </div>
+                    </div>
+                    <div class="note">
+                        <strong data-translate="thanks">thanks for visiting!!!</strong>
+                        <div class="dninote"><strong>FYI:</strong> <span data-translate="fyi">i didn't fully make this</span></div>
+                    </div>
+                </section>
+            </div>
+            <!-- START OF PORTFOLIO TAB -->
+            <div class="tab-content portfolio-content" id="portfolio-tab">
+                <!-- START OF SKILLS-PORTFOLIO -->
+                <div class="skills-card">
+                    <div class="skills-card-header">
+                        <div class="skills-icon">⚡</div>
+                        <div class="skills-header-text">
+                            <h3 class="skills-title" data-translate="skills-title">Skills & Expertise</h3>
+                            <p class="skills-subtitle" data-translate="skills-subtitle">what i'm good at</p>
+                        </div>
+                    </div>
+                    <div class="skills-content">
+                        <div class="skills-tags">
+                            <span class="skill-tag">Video Editing</span>
+                            <span class="skill-tag">Motion Graphics</span>
+                            <span class="skill-tag">Video Games</span>
+                            <span class="skill-tag">Photography</span>
+                            <span class="skill-tag">Visual Design</span>
+                        </div>
+                        <div class="skills-proficiency">
+                            <!-- Progress bars -->
+                            <div class="proficiency-item">
+                                <div class="proficiency-header">
+                                    <span class="proficiency-label">Python</span>
+                                    <span class="proficiency-value">30%</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" style="width: 30%;"></div>
+                                </div>
+                            </div>
+                            <div class="proficiency-item">
+                                <div class="proficiency-header">
+                                    <span class="proficiency-label">Video Editing</span>
+                                    <span class="proficiency-value">75%</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" style="width: 75%;"></div>
+                                </div>
+                            </div>
+                            <div class="proficiency-item">
+                                <div class="proficiency-header">
+                                    <span class="proficiency-label">CSS, HTML, JavaScript</span>
+                                    <span class="proficiency-value">15%</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" style="width: 15%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <!-- END OF SKILLS-PORTFOLIO -->
+                </div>
+                <!-- START OF PROJECTS-PORTFOLIO -->
+                <h2 style="margin:10px 0;font-size:20px;color:var(--accent);font-family:'Montserrat',sans-serif" data-translate="portfolio-heading">My Projects</h2>
+                <div class="portfolio-grid">
+                    <a href="https://www.roblox.com/catalog/92115969258782/batik-spega" target="_blank" class="portfolio-item">
+                        <div class="portfolio-image img-loading" style="background-image:url('https://i.ibb.co.com/YsmxWhM/Screenshot-2025-07-20-012806.png')"></div>
+                        <div class="portfolio-desc">
+                            <h4 data-translate="project1-title">School Uniform in Roblox</h4>
+                            <p data-translate="project1-desc">a replica of my school's batik uniform in Roblox, by editing photos of the irl uniform. made some robux from it.</p>
+                        </div>
+                    </a>
+                    <a href="https://www.roblox.com/games/118579241387230/forgotten" target="_blank" class="portfolio-item">
+                        <div class="portfolio-image img-loading" style="background-image:url('https://i.ibb.co.com/n8r2yZ5V/Screenshot-2025-08-13-010836.png')"></div>
+                        <div class="portfolio-desc">
+                            <h4 data-translate="project2-title">School Replica in Roblox</h4>
+                            <p data-translate="project2-desc">a decently accurate replica of my school remade in Roblox, using Roblox Studio (work in progress).</p>
+                        </div>
+                    </a>
+                    <a href="https://90icetea.github.io/intro/" target="_blank" class="portfolio-item">
+                        <div class="portfolio-image img-loading" style="background-image:url('https://i.ibb.co.com/HT6W861z/Screenshot-2025-10-23-at-14-25-17-90icetea-s-uhh-something.png')"></div>
+                        <div class="portfolio-desc">
+                            <h4 data-translate="project3-title">Personal Website</h4>
+                            <p data-translate="project3-desc">a smooth, unique, browser-window-style introduction, portfolio, and blog website for myself.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="tab-content blog-content" id="blog-tab">
+                <h2 style="margin:10px 0;font-size:20px;color:var(--accent);font-family:'Montserrat',sans-serif" data-translate="blog-heading">Blog Posts</h2>
+                <p style="color:var(--muted);margin:0 0 15px 10px" data-translate="blog-subheading">thoughts, updates, and musings</p>
+                <div class="blog-grid">
+                    <div class="blog-item" data-blog="ae-progress">
+                        <div class="blog-image img-loading" style="background-image:url('https://i.ibb.co.com/0yPZQxkk/Comp-1-2-3.gif')"></div>
+                        <div class="blog-text">
+                            <div class="blog-date" data-translate="blog1-date">August 6, 2025</div>
+                            <h3 data-translate="blog1-title">Learning After Effects</h3>
+                            <p data-translate="blog1-preview">My journey switching from Alight Motion to After Effects and what I learned along the way...</p>
+                        </div>
+                    </div>
+                    <div class="blog-item" data-blog="site-launch">
+                        <div class="blog-image img-loading" style="background-image:url('https://i.ibb.co.com/YGxrRCt/Screenshot-2025-08-13-011058.png')"></div>
+                        <div class="blog-text">
+                            <div class="blog-date" data-translate="blog2-date">August 13, 2025</div>
+                            <h3 data-translate="blog2-title">Building My Personal Website</h3>
+                            <p data-translate="blog2-preview">The story behind creating this site and the design choices I made...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="blog-modal" id="blogModal">
+        <div class="blog-modal-content">
+            <button class="blog-modal-close" id="blogModalClose">×</button>
+            <video id="blogModalVideo" class="blog-modal-header-image" style="display: none;" controls preload="none">
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <img id="blogModalImage" class="blog-modal-header-image" alt="Blog post header" style="display: none;">
+            <h2 id="blogModalTitle"></h2>
+            <div class="blog-date" id="blogModalDate"></div>
+            <div class="markdown-content" id="blogModalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            // Translations
+            const translations = {
+                en: {
+                    loading: 'Loading...',
+                    'tab-main': 'Main',
+                    'tab-portfolio': 'Portfolio',
+                    'tab-blog': 'Blog',
+                    help: 'Help',
+                    logout: 'Log Out',
+                    'socials-title': 'Socials',
+                    'interests-title': 'Interests',
+                    'interests-text': 'video editing, motion graphics, python, cybersecurity, linux, photography, visual design',
+                    aka: 'a.k.a',
+                    bio: 'script kiddie | fluent english and indonesian · interest in cybersecurity (redteam) · i use arch btw',
+                    quote: '"Cogito, ergo sum." -René Descartes',
+                    next: 'Next:',
+                    'site-update-title': 'Site Update',
+                    'site-update-date': 'November 12, 2025',
+                    'site-update-desc': 'massively updated the website, looks visually more pleasing, feels smoother, added lots of features, improved performance.',
+                    'music-title': 'Music',
+                    'music-text': 'reality club, the smiths, mac demarco, radiohead, tyler the creator, tv girl',
+                    'media-title': 'Visual Media',
+                    'media-text': 'neon genesis evangelion, breaking bad, 500 days of summer, bladerunner 2049, fight club',
+                    'games-title': 'Games',
+                    'games-text': 'minecraft, roblox, pubgm, free fire, chess, singleplayer story games.',
+                    thanks: 'thanks for visiting!!!',
+                    fyi: "i vibecoded this website",
+                    'skills-title': 'Skills & Expertise',
+                    'skills-subtitle': "what i'm good at",
+                    'portfolio-heading': 'My Projects',
+                    'portfolio-subheading': 'a collection of all of my (public) projects',
+                    'project1-title': 'School Uniform in Roblox',
+                    'project1-desc': "a replica of my school's batik uniform in Roblox, by editing photos of the irl uniform. made some robux from it.",
+                    'project2-title': 'School Replica in Roblox',
+                    'project2-desc': 'a decently accurate replica of my school remade in Roblox, using Roblox Studio (work in progress).',
+                    'project3-title': 'Personal Website',
+                    'project3-desc': 'a smooth, unique, browser-window-style introduction, portfolio, and blog website for myself.',
+                    'blog-heading': 'Blog Posts',
+                    'blog-subheading': 'all of my previous blog posts',
+                    'blog1-date': 'August 6, 2025',
+                    'blog1-title': 'After Effects Progress',
+                    'blog1-preview': 'emu otori edit that i remade in after effects, as seen in the timelapse. turned out nice.',
+                    'blog2-date': 'August 13, 2025',
+                    'blog2-title': 'Site Launch',
+                    'blog2-preview': "launched my personal static website. it's a self introduction, portfolio, blog in one website.",
+                    'blog3-date': 'October 15, 2025',
+                    'blog3-title': 'Getting Into Cybersecurity',
+                    'blog3-preview': "Why I'm passionate about cybersecurity and the resources I'm using to learn..."
+                },
+                id: {
+                    loading: 'Memuat...',
+                    'tab-main': 'Utama',
+                    'tab-portfolio': 'Portofolio',
+                    'tab-blog': 'Blog',
+                    help: '    Info',
+                    logout: 'Keluar',
+                    'socials-title': 'Media Sosial',
+                    'interests-title': 'Minat',
+                    'interests-text': 'video editing, motion graphics, python, cybersecurity, linux, fotografi, desain visual',
+                    aka: 'alias',
+                    bio: 'script kiddie | fasih bahasa inggris dan indonesia · nyoba cybersecurity (redteam) · arch btw',
+                    quote: '"Cogito, ergo sum." -René Descartes',
+                    next: 'Selanjutnya:',
+                    'site-update-title': 'Update Website',
+                    'site-update-date': '12 November 2025',
+                    'site-update-desc': 'update besar ke website, lebih enak dilihat, terasa lebih smooth, penambahan fitur banyak, update performa.',
+                    'music-title': 'Musik',
+                    'music-text': 'reality club, the smiths, mac demarco, radiohead, tyler the creator, tv girl',
+                    'media-title': 'Media Visual',
+                    'media-text': 'neon genesis evangelion, breaking bad, 500 days of summer, bladerunner 2049, fight club',
+                    'games-title': 'Game',
+                    'games-text': 'minecraft, roblox, pubgm, free fire, catur, game cerita singleplayer.',
+                    thanks: 'terima kasih sudah berkunjung!!!',
+                    fyi: "ini websitenya ku vibecode",
+                    'skills-title': 'Keahlian & Kemampuan',
+                    'skills-subtitle': 'apa aja yang aku pro di bidangnya',
+                    'portfolio-heading': 'Proyekku',
+                    'portfolio-subheading': 'koleksi semua proyekku (yang publik)',
+                    'project1-title': 'Seragam Sekolah di Roblox',
+                    'project1-desc': 'replika seragam batik sekolahku di Roblox, dengan ngedit foto seragam aslinya. lumayan dapet banyak robux.',
+                    'project2-title': 'Replika Sekolah di Roblox',
+                    'project2-desc': 'replika yang cukup akurat dari sekolahku yang dibuat ulang di Roblox, menggunakan Roblox Studio (masih dalam proses).',
+                    'project3-title': 'Situs Web Pribadi',
+                    'project3-desc': 'situs web perkenalan dan portofolio bertema window browser yang apik dan unik untuk diriku sendiri.',
+                    'blog-heading': 'Postingan Blog',
+                    'blog-subheading': 'postinganku sebelumnya',
+                    'blog1-date': '6 Agustus 2025',
+                    'blog1-title': 'Progress After Effects',
+                    'blog1-preview': 'emu otori edit yang ku remake di after effects, seperti di timelapse atas. hasilnya lumayan.',
+                    'blog2-date': '13 Agustus 2025',
+                    'blog2-title': 'Peresmian Website',
+                    'blog2-preview': "peresmian website pribadiku. website perkenalan, portofolio, dan blog dalam satu website.",
+                    'blog3-date': '15 Oktober 2025',
+                    'blog3-title': 'Terjun ke Dunia Keamanan Siber',
+                    'blog3-preview': 'Mengapa saya tertarik dengan keamanan siber dan sumber belajar yang saya gunakan...'
+                }
+            };
+            
+
+            // Blog posts content (Markdown) - with translations
+            const blogPosts = {
+                'site-update': {
+                    en: {
+                        title: 'Site Update',
+                        date: 'November 12, 2025',
+                        image: "https://i.ibb.co.com/z0DgjYD/image.png", // change to video: to use video
+                        content: `
+# 🎯 Website Improvements and Updates
+
+just improved almost everything on the site, here's what's new:
+
+### 👁️ Visual Improvements
+- **smoother animations** - everything feels more fluid now
+- **better color scheme** - more visual hierarchy and contrast
+- **improved cards** - info boxes and content cards pop more
+
+### ⚙️ New Features
+- **blog system** - you're reading it right now!
+- **better music player** - more music and more controls
+- **theme toggle** - added dark theme and light theme
+- **language toggle** - for my indonesian visitors
+
+### ⚡ Performance
+- **better caching** - images load more efficiently
+- **smoother scrolling** - improved scroll performance
+- **no bugs** - thankfully
+
+### 🎨 Color Updates
+- info boxes now use darker background for better contrast
+- portfolio and blog cards have improved visual hierarchy
+- better separation between content and background
+
+## 🕰️ What's Next?
+
+still have some ideas for future updates:
+- [ ] more blog posts
+- [ ] using a custom web domain for the website
+- [ ] more projects to put in portfolio tab
+- [ ] more features(?)
+
+## 📝 Feedback?
+
+if you have any feedback, contact me through my socials
+
+thanks for visiting and checking the update
+`
+                    },
+                    id: {
+                        title: 'Update Website',
+                        date: '12 November 2025',
+                        image: 'https://i.ibb.co.com/z0DgjYD/image.png', // change to video: to use video
+                        content: `
+# 🎯 Pembaruan Website
+
+baru aja memperbarui hampir semuanya di website, ini yang baru:
+
+## Apa yang Berubah?
+
+### 👁️ Peningkatan Visual
+- **animasi lebih smooth** - semuanya terasa lebih fluid sekarang
+- **skema warna lebih bagus** - lebih banyak hierarki visual dan kontras
+- **kotak informasi lebih bagus** - kotak info dan kartu konten lebih menonjol
+
+### ⚙️ Fitur Baru
+- **sistem blog** - yang anda sedang baca sekarang
+- **music player** - lebih banyak musik dan kontrol
+- **ganti tema** - penambahan tema gelap dan tema terang
+- **ganti bahasa** - untuk pengunjung luar negeri
+
+### ⚡ Performa
+- **Caching lebih baik** - gambar dimuat lebih efisien
+- **scrolling lebih halus** - performa scroll ditingkatkan
+- **tanpa bug** - alhamdulillah
+
+### 🎨 Pembaruan Warna
+- kotak info sekarang menggunakan latar belakang lebih gelap untuk kontras yang lebih baik
+- kartu portofolio dan blog memiliki hierarki visual yang ditingkatkan
+- pemisahan yang lebih baik antara konten dan latar belakang
+
+## 🕰️ Apa Selanjutnya?
+
+masih ada ide untuk update di masa depan:
+- [ ] postingan lebih banyak
+- [ ] menggunakan domain web khusus untuk website
+- [ ] lebih banyak proyek di tab portofolio
+- [ ] lebih banyak fitur(?)
+
+## 📝 Saran?
+
+jika anda menemukan masalah atau memiliki saran, hubungi melalui media sosial saya
+
+terima kasih telah berkunjung dan memeriksa pembaruan
+`
+                    }
+                },
+                'ae-progress': {
+                    en: {
+                        title: 'Learning After Effects',
+                        date: 'August 6, 2025',
+                        image: 'https://i.ibb.co.com/z0DgjYD/image.png',
+                        content: `
+# Alight Motion to After Effects
+
+after months of editing on mobile using **Alight Motion**, i finally decided to try Adobe After Effects. here's what i learned in the process.
+
+## Why?
+
+alight motion is great for mobile editing, but i hit a problem.
+my midrange android phone did not like running alight motion whatsoever,
+it was so laggy to the point a 10 minute edit could be a 4 four edit.
+
+i also wanted:
+- more complex animations
+- better effects and plugins
+- professional workflow
+- desktop-level control
+
+## How I Learned
+
+**After Effects was intimidating** at first. the ui is packed with features, and coming from a mobile app, it looked pretty hard.
+
+### What Helped Me Learn
+
+1. **tutorials** - tons of free content out there
+2. **practice projects** - recreating other people's edits
+3. **breaking things** - sometimes the best way to learn
+
+most importantly, i adapted quickly because i understood the fundamentals from Alight Motion.
+
+## This Project
+
+the emu otori edit you see in the thumbnail was one of my after effects edit recreations. It took me:
+- 6 hours total
+- mindless replaying
+- many frustrated imperfections
+- (im not efficient)
+
+## Conclusion
+
+it's been a challenging but rewarding journey. After Effects opens up so many creative possibilities that i couldn't access on mobile. it also gives you experience in motion graphics/video-editing, which you can flex irl.
+
+the gif above shows my timelapse - you can see all the layers and effects that went into it.
+`
+                    },
+                    id: {
+                        title: 'Belajar After Effects',
+                        date: '6 Agustus 2025',
+                        image: 'https://i.ibb.co.com/0yPZQxkk/Comp-1-2-3.gif',
+                        content: `
+# Alight Motion ke After Effects
+
+setelah berbulan-bulan ngedit di hp pake **Alight Motion**, akhirnya kucoba Adobe After Effects. inilah yang ku pahami dalam prosesnya.
+
+## Mengapa?
+
+alight motion bagus buat ngedit di hp, tapi aku ketemu masalah.
+hp midrange ku sangat amat nggak suka alight motion (ngelag, ngecrash, ngefreeze),
+ngelag nemen sampe edit 10 menit bisa jadi edit empat jam.
+
+aku juga pengen:
+- animasi yang lebih kompleks
+- efek dan plugin yang lebih bagus
+- alur kerja yang profesional
+- kebebasan tingkat desktop
+
+## Bagaimana Aku Belajar
+
+**After Effects keliatan susah** pada awalnya. ui nya penuh dengan fitur, dan berasal dari aplikasi mobile, keliatannya susah.
+
+### Apa yang Membantuku Belajar
+
+1. **tutorial** - banyak banget konten gratis di luar sana
+2. **proyek latihan** - bikin ulang editan orang lain
+3. **ngerusak sesuatu** - kadang cara terbaik untuk belajar
+
+yang paling penting, aku beradaptasi cepat karena aku ngerti fundamentalnya dari Alight Motion.
+
+## Proyek Ini
+
+edit emu otori yang kamu lihat di thumbnail adalah salah satu remake edit after effects-ku. itu memakan waktu:
+- 6 jam total
+- ngulang sambil bengong
+- banyak yang nggak sempurna
+- (aku nggak efisien)
+
+## Kesimpulan
+
+ini pengalaman yang susah tapi bermanfaat. After Effects membuka banyak kemungkinan kreatif yang nggak ada di hp. itu juga ngasih pengalaman motion graphics/video-editing.
+
+gif di atas adalah timelapseku - keliatan semua layer & efek yang kupake di dalamnya.
+`
+                    }
+                },
+                'site-launch': {
+                    en: {
+                        title: 'Building My Personal Website',
+                        date: 'August 13, 2025',
+                        image: 'https://i.ibb.co.com/YGxrRCt/Screenshot-2025-08-13-011058.png',
+                        content: `
+# What is this?
+
+welcome to my personal website, it's my introduction and (informal) portfolio at the same time.
+
+## Why?
+
+i thought it would be cool to:
+- showcase my projects
+- write about my interests
+- have my own website available 24/7
+
+## Design Choices
+
+### The Window Style
+
+went with a **browser-window aesthetic** because:
+1. unique and eye-catching
+2. i dont see anyone else doing it like this
+3. compact, focused experience
+4. looks pretty cool ngl
+
+### Dark Theme First
+
+as a night owl, **dark mode is essential**. the color scheme i chose:
+- easy on the eyes
+- professional looking
+- good contrast for readability
+
+i like its overall visual quality tbh
+
+## Future Plans
+
+stuff i wanna add:
+- [ ] blog system
+- [ ] theme toggle
+- [ ] language toggle
+- [ ] more interactivity and animations
+
+
+## Thank you!
+
+if you're reading this, thanks for checking out my site. feel free to explore, and if you find any bugs.. well they're features now lol
+
+got feedback? dm me on any of my socials
+`
+                    },
+                    id: {
+                        title: 'Membangun Situs Web Pribadi Saya',
+                        date: '13 Agustus 2025',
+                        image: 'https://i.ibb.co.com/YGxrRCt/Screenshot-2025-08-13-011058.png',
+                        content: `
+# Ini Apaan?
+
+selamat datang di *website* pribadiku, ini perkenalan sekaligus portofolioku (yang santai) juga.
+
+## Kenapa?
+
+aku mikir keren aja kalo bisa:
+- pamerin proyek-proyekku
+- nulis tentang hal-hal yang aku suka
+- punya website sendiri yang online 24/7
+
+## Pilihan Desain
+
+### Gaya Jendela
+
+aku milih **estetika jendela *browser*** karena:
+1. unik dan menarik perhatian
+2. aku jarang liat orang lain bikin kayak gini
+3. pengalaman yang ringkas dan fokus
+4. keren aja
+
+### *Dark Theme* Duluan
+
+**mode gelap itu wajib**. skema warna yang aku pilih:
+- enak dilihat mata
+- keliatan profesional
+- kontrasnya bagus buat dibaca
+
+aku suka banget sama kualitas visualnya secara keseluruhan
+
+## Rencana Masa Depan
+
+hal-hal yang pengen aku tambahin:
+- [ ] sistem blog
+- [ ] tombol ganti tema (*theme toggle*)
+- [ ] tombol ganti bahasa (*language toggle*)
+- [ ] lebih banyak interaktivitas dan animasi
+
+## Makasih
+
+kalo kamu baca ini, makasih udah mampir ke situs-ku. silakan liat liat, kalo ketemu bug, 100% itu fitur
+
+punya masukan? dm aja
+`
+                    }
+                },
+                'cybersecurity': {
+                    en: {
+                        title: 'Getting Into Cybersecurity',
+                        date: 'October 15, 2025',
+                        image: 'https://i.ibb.co.com/BVJW0NvF/void.jpg',
+                        content: `
+# My Cybersecurity Journey
+
+**pecintacybersecurity999** isn't just a username - it represents my genuine passion for cybersecurity and ethical hacking.
+
+## How It Started
+
+My interest in cybersecurity began when I:
+- Accidentally broke my first Linux installation
+- Got curious about how systems work
+- Watched too many hacking movies (they're not realistic, but they're cool!)
+- Realized technology needs people to protect it
+
+## What I'm Learning
+
+### Current Focus Areas
+
+**1. Linux Fundamentals**
+- Command line mastery
+- System administration
+- I use Arch btw (had to say it)
+
+**2. Networking**
+- TCP/IP protocols
+- How data moves across the internet
+- Network security basics
+
+**3. Python for Security**
+\`\`\`python
+# Simple port scanner I wrote
+import socket
+
+def scan_port(host, port):
+    try:
+        sock = socket.socket()
+        sock.settimeout(1)
+        sock.connect((host, port))
+        return True
+    except:
+        return False
+\`\`\`
+
+### Tools I'm Learning
+
+- **Kali Linux** - The hacker's playground
+- **Wireshark** - Network analysis
+- **Metasploit** - Penetration testing framework
+- **Burp Suite** - Web application security
+
+## Resources I Recommend
+
+### Free Learning Platforms
+1. **TryHackMe** - Gamified learning (my favorite!)
+2. **HackTheBox** - Real-world scenarios
+3. **OverTheWire** - War games for learning
+4. **YouTube** - So many great channels
+
+### Books I'm Reading
+- "The Hacker Playbook" series
+- "Penetration Testing" by Georgia Weidman
+- Various online resources and documentation
+
+## Ethical Hacking
+
+> With great power comes great responsibility
+
+I can't stress this enough: **only hack systems you have permission to test**. Ethical hacking is about:
+- Protecting, not attacking
+- Finding vulnerabilities to fix them
+- Making the internet safer
+- Following responsible disclosure
+
+## My Goals
+
+### Short Term
+- [ ] Complete TryHackMe beginner path
+- [ ] Get comfortable with Linux
+- [ ] Learn more about web vulnerabilities
+- [ ] Build my own security tools
+
+### Long Term
+- [ ] Get security certifications (CEH, OSCP)
+- [ ] Participate in CTF competitions
+- [ ] Contribute to open source security projects
+- [ ] Maybe work in cybersecurity professionally
+
+## Challenges and Reality
+
+It's not all Hollywood hacking montages. Real cybersecurity is:
+- **Lots of reading** - Documentation is your friend
+- **Patient debugging** - Why isn't this exploit working?
+- **Continuous learning** - Technology changes fast
+- **Attention to detail** - Small mistakes = big problems
+
+## Why It Matters
+
+In today's digital world, cybersecurity is crucial:
+- Data breaches affect millions
+- Privacy is under constant threat
+- Critical infrastructure needs protection
+- Someone needs to be the good guys
+
+## Advice for Beginners
+
+Starting in cybersecurity? Here's my advice:
+
+1. **Learn the basics first** - Understand how things work normally before you try to break them
+2. **Practice legally** - Use CTF platforms and your own lab
+3. **Join communities** - Reddit, Discord, forums - ask questions!
+4. **Don't get discouraged** - It's complex, but rewarding
+5. **Stay curious** - Always ask "how does this work?"
+
+## My Setup
+
+Currently learning on:
+- **Arch Linux** (btw)
+- **VirtualBox** for testing
+- **Raspberry Pi** for projects
+- Various **cloud services** for practice
+
+## Final Thoughts
+
+Cybersecurity isn't just my interest - it's my passion. Every day I learn something new, every problem I solve makes me better, and every system I secure (in practice) makes me more confident.
+
+The field is challenging, constantly evolving, and absolutely fascinating. If you're interested in cybersecurity too, feel free to reach out. Let's learn together!
+
+*Stay curious, stay ethical, stay secure.* 🔒
+`
+                    },
+                    id: {
+                        title: 'Terjun ke Dunia Keamanan Siber',
+                        date: '15 Oktober 2025',
+                        image: 'https://i.ibb.co.com/BVJW0NvF/void.jpg',
+                        content: `
+# Perjalanan Keamanan Siber Saya
+
+**pecintacybersecurity999** bukan hanya nama pengguna - ini mewakili passion saya yang tulus untuk keamanan siber dan ethical hacking.
+
+## Bagaimana Ini Dimulai
+
+Minat saya pada keamanan siber dimulai ketika saya:
+- Secara tidak sengaja merusak instalasi Linux pertama saya
+- Menjadi penasaran tentang cara kerja sistem
+- Menonton terlalu banyak film hacking (mereka tidak realistis, tapi keren!)
+- Menyadari teknologi membutuhkan orang untuk melindunginya
+
+## Apa yang Saya Pelajari
+
+### Area Fokus Saat Ini
+
+**1. Fundamental Linux**
+- Penguasaan command line
+- Administrasi sistem
+- Saya pakai Arch btw (harus mengatakannya)
+
+**2. Jaringan**
+- Protokol TCP/IP
+- Bagaimana data bergerak melintasi internet
+- Dasar-dasar keamanan jaringan
+
+**3. Python untuk Keamanan**
+\`\`\`python
+# Port scanner sederhana yang saya tulis
+import socket
+
+def scan_port(host, port):
+    try:
+        sock = socket.socket()
+        sock.settimeout(1)
+        sock.connect((host, port))
+        return True
+    except:
+        return False
+\`\`\`
+
+### Alat yang Saya Pelajari
+
+- **Kali Linux** - Taman bermain hacker
+- **Wireshark** - Analisis jaringan
+- **Metasploit** - Framework pengujian penetrasi
+- **Burp Suite** - Keamanan aplikasi web
+
+## Sumber Daya yang Saya Rekomendasikan
+
+### Platform Pembelajaran Gratis
+1. **TryHackMe** - Pembelajaran gamifikasi (favorit saya!)
+2. **HackTheBox** - Skenario dunia nyata
+3. **OverTheWire** - War games untuk belajar
+4. **YouTube** - Begitu banyak saluran bagus
+
+### Buku yang Saya Baca
+- Seri "The Hacker Playbook"
+- "Penetration Testing" oleh Georgia Weidman
+- Berbagai sumber daya online dan dokumentasi
+
+## Ethical Hacking
+
+> Dengan kekuatan besar datang tanggung jawab besar
+
+Saya tidak bisa cukup menekankan ini: **hanya hack sistem yang Anda miliki izin untuk menguji**. Ethical hacking adalah tentang:
+- Melindungi, bukan menyerang
+- Menemukan kerentanan untuk memperbaikinya
+- Membuat internet lebih aman
+- Mengikuti pengungkapan yang bertanggung jawab
+
+## Tujuan Saya
+
+### Jangka Pendek
+- [ ] Menyelesaikan jalur pemula TryHackMe
+- [ ] Nyaman dengan Linux
+- [ ] Belajar lebih banyak tentang kerentanan web
+- [ ] Membangun alat keamanan saya sendiri
+
+### Jangka Panjang
+- [ ] Mendapatkan sertifikasi keamanan (CEH, OSCP)
+- [ ] Berpartisipasi dalam kompetisi CTF
+- [ ] Berkontribusi pada proyek keamanan open source
+- [ ] Mungkin bekerja di keamanan siber secara profesional
+
+## Tantangan dan Realitas
+
+Ini bukan semua montase hacking Hollywood. Keamanan siber nyata adalah:
+- **Banyak membaca** - Dokumentasi adalah teman Anda
+- **Debugging sabar** - Mengapa exploit ini tidak berfungsi?
+- **Pembelajaran berkelanjutan** - Teknologi berubah cepat
+- **Perhatian terhadap detail** - Kesalahan kecil = masalah besar
+
+## Mengapa Ini Penting
+
+Di dunia digital saat ini, keamanan siber sangat penting:
+- Pelanggaran data memengaruhi jutaan orang
+- Privasi berada di bawah ancaman konstan
+- Infrastruktur kritis membutuhkan perlindungan
+- Seseorang perlu menjadi orang baik
+
+## Saran untuk Pemula
+
+Memulai di keamanan siber? Berikut saran saya:
+
+1. **Pelajari dasar-dasarnya terlebih dahulu** - Pahami bagaimana hal-hal bekerja secara normal sebelum Anda mencoba merusaknya
+2. **Latihan secara legal** - Gunakan platform CTF dan lab Anda sendiri
+3. **Bergabunglah dengan komunitas** - Reddit, Discord, forum - ajukan pertanyaan!
+4. **Jangan berkecil hati** - Ini kompleks, tapi bermanfaat
+5. **Tetap penasaran** - Selalu tanya "bagaimana ini bekerja?"
+
+## Setup Saya
+
+Saat ini belajar di:
+- **Arch Linux** (btw)
+- **VirtualBox** untuk pengujian
+- **Raspberry Pi** untuk proyek
+- Berbagai **layanan cloud** untuk latihan
+
+## Pemikiran Akhir
+
+Keamanan siber bukan hanya minat saya - ini passion saya. Setiap hari saya belajar sesuatu yang baru, setiap masalah yang saya selesaikan membuat saya lebih baik, dan setiap sistem yang saya amankan (dalam latihan) membuat saya lebih percaya diri.
+
+Bidang ini menantang, terus berkembang, dan benar-benar menarik. Jika Anda juga tertarik dengan keamanan siber, jangan ragu untuk menghubungi. Mari belajar bersama!
+
+*Tetap penasaran, tetap etis, tetap aman.* 🔒
+`
+                    }
+                }
+            };
+
+            // Language management
+            const langToggle = document.getElementById('langToggle');
+            const langSlider = document.getElementById('langSlider');
+            const body = document.body;
+
+            // Load saved language
+            const savedLang = localStorage.getItem('language') || 'en';
+            body.setAttribute('data-lang', savedLang);
+            updateLanguage(savedLang);
+
+            function updateLanguage(lang) {
+                langSlider.textContent = lang.toUpperCase();
+                
+                // Update all translatable elements
+                document.querySelectorAll('[data-translate]').forEach(el => {
+                    const key = el.getAttribute('data-translate');
+                    if (translations[lang] && translations[lang][key]) {
+                        el.textContent = translations[lang][key];
+                    }
+                });
+
+                // Update blog modal if it's open
+                const blogModal = document.getElementById('blogModal');
+                if (blogModal.classList.contains('show')) {
+                    const currentBlogId = blogModal.getAttribute('data-current-blog');
+                    if (currentBlogId && blogPosts[currentBlogId]) {
+                        updateBlogModalContent(currentBlogId, lang);
+                    }
+                }
+            }
+
+            function updateBlogModalContent(blogId, lang) {
+                const post = blogPosts[blogId][lang];
+                if (post) {
+                    document.getElementById('blogModalTitle').textContent = post.title;
+                    document.getElementById('blogModalDate').textContent = post.date;
+                    document.getElementById('blogModalContent').innerHTML = marked.parse(post.content);
+                }
+            }
+
+            langToggle.addEventListener('click', () => {
+                const currentLang = body.getAttribute('data-lang');
+                const newLang = currentLang === 'en' ? 'id' : 'en';
+                body.setAttribute('data-lang', newLang);
+                localStorage.setItem('language', newLang);
+                updateLanguage(newLang);
+            });
+
+            // Theme management
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            body.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+
+            function updateThemeIcon(theme) {
+                if (theme === 'light') {
+                    themeIcon.innerHTML = '<circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"/>';
+                } else {
+                    themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/>';
+                }
+            }
+
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                body.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+                updateProgressFill();
+            });
+
+            // Image loading handler
+            function setupImageLoading() {
+                const images = document.querySelectorAll('.img-loading img');
+                images.forEach(img => {
+                    if (img.complete) {
+                        img.parentElement.classList.add('loaded');
+                    } else {
+                        img.addEventListener('load', () => {
+                            img.parentElement.classList.add('loaded');
+                        });
+                    }
+                });
+
+                const bgImages = document.querySelectorAll('.portfolio-image, .blog-image');
+                bgImages.forEach(el => {
+                    const bgUrl = el.style.backgroundImage.match(/url\(['"]?(.*?)['"]?\)/);
+                    if (bgUrl) {
+                        const img = new Image();
+                        img.onload = () => el.classList.add('loaded');
+                        img.src = bgUrl[1];
+                    }
+                });
+            }
+
+            // Loading screen
+            window.addEventListener('load', () => {
+                setupImageLoading();
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                }, 500);
+            });
+
+            // Music playlist
+            const playlist = [
+                {
+                    title: "The Blonde",
+                    artist: "TV Girl",
+                    url: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/Ziklibrenbib/TV_Girl/French_exit/TV_Girl_-_07_-_The_Blonde.mp3",
+                    cover: "https://upload.wikimedia.org/wikipedia/en/9/96/TV_Girl_-_French_Exit.png"
+                },
+                {
+                    title: "Cherry Waves",
+                    artist: "Deftones",
+                    url: "https://files.catbox.moe/9ozx2x.mp3",
+                    cover: "https://upload.wikimedia.org/wikipedia/en/9/99/Saturday_night_wrist.jpg"
+                },
+                {
+                    title: "SLOW DANCING IN THE DARK",
+                    artist: "Joji",
+                    url: "https://files.catbox.moe/tmvah0.mp3",
+                    cover: "https://i.scdn.co/image/ab67616d0000b2734cc52cd7a712842234e4fce2"
+                },
+                {
+                    title: "She",
+                    artist: "Tyler, The Creator",
+                    url: "https://files.catbox.moe/nl5e9c.mp3",
+                    cover: "https://i.scdn.co/image/ab67616d0000b273042a9dff43f64e1acf918acd"
+                },
+                {
+                    title: "There Is a Light That Never Goes Out",
+                    artist: "The Smiths",
+                    url: "https://files.catbox.moe/f069z3.mp3",
+                    cover: "https://i.scdn.co/image/ab67616d0000b273ada101c2e9e97feb8fae37a9"
+                }
+            ];
+
+            let currentTrackIndex = Math.floor(Math.random() * playlist.length);
+
+            const playBtn = document.getElementById('playBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const progress = document.getElementById('progress');
+            const currentTimeEl = document.getElementById('currentTime');
+            const totalTimeEl = document.getElementById('totalTime');
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const discordBtn = document.getElementById('discordBtn');
+            const minimizeBtn = document.getElementById('minimizeBtn');
+            const maximizeBtn = document.getElementById('maximizeBtn');
+            const closeBtn = document.getElementById('closeBtn');
+            const mainWindow = document.getElementById('mainWindow');
+            const easterEgg = document.getElementById('easterEgg');
+            const helpBtn = document.getElementById('helpBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const recordArt = document.getElementById('recordArt');
+            const recordImg = document.getElementById('recordImg');
+            const trackTitle = document.getElementById('trackTitle');
+            const trackArtist = document.getElementById('trackArtist');
+            const nextTrack = document.getElementById('nextTrack');
+            const blogModal = document.getElementById('blogModal');
+            const blogModalClose = document.getElementById('blogModalClose');
+            const blogModalTitle = document.getElementById('blogModalTitle');
+            const blogModalDate = document.getElementById('blogModalDate');
+            const blogModalContent = document.getElementById('blogModalContent');
+            const blogModalImage = document.getElementById('blogModalImage');
+            const blogModalVideo = document.getElementById('blogModalVideo');
+
+            let audio = new Audio();
+            let animationId = null;
+            let dragging = false;
+
+            function loadTrack(index) {
+                const track = playlist[index];
+                audio.src = track.url;
+                audio.load();
+                
+                recordImg.src = track.cover;
+                trackTitle.textContent = track.title;
+                trackArtist.textContent = track.artist;
+                
+                const nextIndex = (index + 1) % playlist.length;
+                nextTrack.textContent = `${playlist[nextIndex].title} - ${playlist[nextIndex].artist}`;
+            }
+
+            function formatTime(s){
+                if (!isFinite(s)) return '00:00';
+                s = Math.max(0, Math.floor(s));
+                const m = Math.floor(s/60);
+                const sec = s % 60;
+                return (m < 10 ? '0'+m : m) + ':' + (sec < 10 ? '0'+sec : sec);
+            }
+
+            function updateProgressFill() {
+                const percent = progress.value || 0;
+                const fillColor = 'var(--accent)'; 
+                const trackColor = 'var(--border)';
+                
+                progress.style.background = `linear-gradient(to right, ${fillColor} ${percent}%, ${trackColor} ${percent}%)`;
+            }
+
+            function updateUI(){
+                const t = audio.currentTime || 0;
+                const d = audio.duration || 0;
+                if (!dragging && isFinite(d) && d > 0) {
+                    const percent = Math.round((t/d)*100);
+                    progress.value = Math.min(100, Math.max(0, percent));
+                }
+                currentTimeEl.textContent = formatTime(t);
+                totalTimeEl.textContent = formatTime(d);
+                updateProgressFill();
+            }
+
+            function animate(){
+                updateUI();
+                if(!audio.paused){
+                    animationId = requestAnimationFrame(animate);
+                }
+            }
+
+            function updatePlayBtn(playing){
+                playBtn.textContent = playing ? '⏸' : '▶';
+                recordArt.classList.toggle('spinning', playing);
+            }
+
+            function togglePlay() {
+                if(audio.paused){
+                    audio.play().catch(err => console.log('Playback prevented:', err));
+                } else {
+                    audio.pause();
+                }
+            }
+
+            playBtn.addEventListener('click', togglePlay);
+
+            function playPrevious() {
+                currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+                const wasPlaying = !audio.paused;
+                loadTrack(currentTrackIndex);
+                if(wasPlaying){
+                    audio.play().catch(err => console.log('Playback prevented:', err));
+                }
+            }
+
+            prevBtn.addEventListener('click', playPrevious);
+
+            function playNext() {
+                currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+                const wasPlaying = !audio.paused;
+                loadTrack(currentTrackIndex);
+                if(wasPlaying){
+                    audio.play().catch(err => console.log('Playback prevented:', err));
+                }
+            }
+
+            nextBtn.addEventListener('click', playNext);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                
+                if (blogModal.classList.contains('show')) {
+                    if (e.key === 'Escape') {
+                        blogModal.classList.remove('show');
+                        blogModal.removeAttribute('data-current-blog');
+                        document.body.style.overflow = '';
+                        blogModalVideo.pause();
+                    }
+                    return;
+                }
+
+                switch(e.code) {
+                    case 'Space':
+                        e.preventDefault();
+                        togglePlay();
+                        break;
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        playPrevious();
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        playNext();
+                        break;
+                }
+            });
+
+            progress.max = 100;
+            progress.addEventListener('input', ()=>{
+                dragging = true;
+                const pct = progress.value / 100;
+                const d = audio.duration || 0;
+                if (isFinite(d)) {
+                    const newT = pct * d;
+                    currentTimeEl.textContent = formatTime(newT);
+                }
+                updateProgressFill();
+            });
+
+            progress.addEventListener('change', ()=>{
+                const pct = progress.value / 100;
+                const d = audio.duration || 0;
+                if (isFinite(d)) {
+                    audio.currentTime = pct * d;
+                }
+                dragging = false;
+                updateUI();
+            });
+
+            audio.addEventListener('loadedmetadata', updateUI);
+            audio.addEventListener('timeupdate', ()=>{
+                if(!dragging) updateUI();
+            });
+
+            audio.addEventListener('play', ()=>{
+                updatePlayBtn(true);
+                if (animationId) cancelAnimationFrame(animationId);
+                animationId = requestAnimationFrame(animate);
+            });
+
+            audio.addEventListener('pause', ()=> {
+                updatePlayBtn(false);
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+            });
+            
+            audio.addEventListener('ended', ()=>{
+                updatePlayBtn(false);
+                currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+                loadTrack(currentTrackIndex);
+                audio.play().catch(err => console.log('Playback prevented:', err));
+            });
+
+            discordBtn.addEventListener('click', ()=>{
+                const currentLang = body.getAttribute('data-lang');
+                if (currentLang === 'id') {
+                    alert('discord tidak mendukung tautan profil, kirim pesan saya @squidard (pengguna discord saya)');
+                } else {
+                    alert('discord doesn\'t support profile links, message me instead @squidard (my discord user)');
+                }
+            });
+
+            minimizeBtn.addEventListener('click', ()=>{
+                mainWindow.classList.add('minimized');
+                setTimeout(()=>{
+                    easterEgg.classList.add('show');
+                    setTimeout(()=>{
+                        easterEgg.classList.remove('show');
+                        setTimeout(()=>{
+                            mainWindow.classList.remove('minimized');
+                        }, 300);
+                    }, 3000);
+                }, 300);
+            });
+
+            maximizeBtn.addEventListener('click', ()=>{
+                mainWindow.classList.toggle('maximized');
+            });
+
+            closeBtn.addEventListener('click', ()=>{
+                window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+            });
+
+            helpBtn.addEventListener('click', ()=>{
+                window.location.href = 'https://github.com/90icetea/intro';
+            });
+
+            logoutBtn.addEventListener('click', ()=>{
+                const currentLang = body.getAttribute('data-lang');
+                if (currentLang === 'id') {
+                    alert('keluar...???');
+                } else {
+                    alert('log out...???');
+                }
+            });
+
+            tabs.forEach(btn=>{
+                btn.addEventListener('click', ()=>{
+                    tabs.forEach(t=> t.classList.remove('active'));
+                    btn.classList.add('active');
+                    const tabId = btn.getAttribute('data-tab');
+                    tabContents.forEach(content => content.style.display = 'none');
+                    document.getElementById(`${tabId}-tab`).style.display = 'flex';
+                    
+                    setTimeout(setupImageLoading, 100);
+                });
+            });
+
+            function openBlogModal(blogId) {
+                const currentLang = body.getAttribute('data-lang');
+                const post = blogPosts[blogId][currentLang];
+                
+                if (post) {
+                    blogModalTitle.textContent = post.title;
+                    blogModalDate.textContent = post.date;
+                    blogModalContent.innerHTML = marked.parse(post.content);
+                    
+                    blogModalImage.style.display = 'none';
+                    blogModalImage.src = '';
+                    blogModalVideo.style.display = 'none';
+                    blogModalVideo.pause();
+                    blogModalVideo.src = '';
+
+                    if (post.video) {
+                        blogModalVideo.src = post.video;
+                        blogModalVideo.style.display = 'block';
+                    } else if (post.image) {
+                        blogModalImage.src = post.image;
+                        blogModalImage.style.display = 'block';
+                    }
+                    
+                    blogModal.classList.add('show');
+                    blogModal.setAttribute('data-current-blog', blogId);
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            const blogItems = document.querySelectorAll('.blog-item');
+            blogItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const blogId = item.getAttribute('data-blog');
+                    openBlogModal(blogId);
+                });
+            });
+
+            const siteUpdateCard = document.querySelector('[data-blog="site-update"]');
+            if (siteUpdateCard) {
+                siteUpdateCard.addEventListener('click', () => {
+                    openBlogModal('site-update');
+                });
+            }
+
+            blogModalClose.addEventListener('click', () => {
+                blogModal.classList.remove('show');
+                blogModal.removeAttribute('data-current-blog');
+                document.body.style.overflow = '';
+                blogModalVideo.pause();
+            });
+
+            blogModal.addEventListener('click', (e) => {
+                if (e.target === blogModal) {
+                    blogModal.classList.remove('show');
+                    blogModal.removeAttribute('data-current-blog');
+                    document.body.style.overflow = '';
+                    blogModalVideo.pause();
+                }
+            });
+
+            loadTrack(currentTrackIndex);
+            updateProgressFill();
+        })();
+    </script>
 </body>
-<script>
-(function(){
-const playBtn = document.getElementById('playBtn');
-const progress = document.getElementById('progress');
-const currentTimeEl = document.getElementById('currentTime');
-const totalTimeEl = document.getElementById('totalTime');
-const loadBtn = document.getElementById('loadBtn');
-const audioFileInput = document.getElementById('audioFile');
-const shareBtn = document.getElementById('shareBtn');
-const tabs = document.querySelectorAll('.tab');
-const tabContents = document.querySelectorAll('.tab-content');
-const discordBtn = document.getElementById('discordBtn');
-const minimizeBtn = document.getElementById('minimizeBtn');
-const maximizeBtn = document.getElementById('maximizeBtn');
-const closeBtn = document.getElementById('closeBtn');
-const mainWindow = document.getElementById('mainWindow');
-const easterEgg = document.getElementById('easterEgg');
-const helpBtn = document.getElementById('helpBtn');
-const logoutBtn = document.getElementById('logoutBtn');
-const recordArt = document.getElementById('recordArt');
-const playingBox = document.getElementById('playingBox');
-
-const DEFAULT_AUDIO_URL = 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/Ziklibrenbib/TV_Girl/French_exit/TV_Girl_-_07_-_The_Blonde.mp3';
-
-let audio = new Audio(DEFAULT_AUDIO_URL);
-let animationId = null;
-
-audio.preload = 'metadata';
-audio.addEventListener('loadedmetadata', ()=>{
-    totalTimeEl.textContent = formatTime(audio.duration);
-    updateUI();
-});
-
-function formatTime(s){
-    s = Math.max(0, Math.floor(s));
-    const m = Math.floor(s/60);
-    const sec = s % 60;
-    return (m < 10 ? '0'+m : m) + ':' + (sec < 10 ? '0'+sec : sec);
-}
-
-progress.max = 100;
-
-function updateUI(){
-    const t = audio.currentTime || 0;
-    const d = audio.duration || 0;
-    const percent = d ? Math.round((t/d)*100) : 0;
-    progress.value = Math.min(100, Math.max(0, percent));
-    currentTimeEl.textContent = formatTime(t);
-    totalTimeEl.textContent = formatTime(d);
-}
-
-function animate(){
-    updateUI();
-    if(!audio.paused){
-        animationId = requestAnimationFrame(animate);
-    }
-}
-
-function updatePlayBtn(playing){
-    playBtn.textContent = playing ? '⏸' : '▶';
-    recordArt.classList.toggle('spinning', playing);
-    // Removed: playingBox.classList.toggle('playing-active', playing);
-}
-
-playBtn.addEventListener('click', ()=>{
-    if(audio.paused){
-        audio.play();
-    } else {
-        audio.pause();
-    }
-});
-
-let dragging = false;
-progress.addEventListener('input', ()=>{
-    dragging = true;
-    const pct = progress.value / 100;
-    const d = audio.duration || 0;
-    const newT = pct * d;
-    currentTimeEl.textContent = formatTime(newT);
-});
-
-progress.addEventListener('change', ()=>{
-    const pct = progress.value / 100;
-    const d = audio.duration || 0;
-    audio.currentTime = pct * d;
-    dragging = false;
-    updateUI();
-});
-
-loadBtn.addEventListener('click', ()=> audioFileInput.click());
-
-audioFileInput.addEventListener('change', (e)=>{
-    const file = e.target.files && e.target.files[0];
-    if(!file) return;
-    const url = URL.createObjectURL(file);
-    audio.src = url;
-    audio.addEventListener('loadedmetadata', ()=>{
-        totalTimeEl.textContent = formatTime(audio.duration);
-        updateUI();
-        audio.play();
-    }, {once:true});
-});
-
-audio.addEventListener('timeupdate', ()=>{
-    if(!dragging) updateUI();
-});
-
-audio.addEventListener('play', ()=>{
-    updatePlayBtn(true);
-    animationId = requestAnimationFrame(animate);
-});
-
-audio.addEventListener('pause', ()=> updatePlayBtn(false));
-audio.addEventListener('ended', ()=> updatePlayBtn(false));
-
-document.getElementById('archiveBtn').addEventListener('click', ()=>{
-    alert('Saved to archive! (This is a demo feature)');
-});
-
-shareBtn.addEventListener('click', async ()=>{
-    const textToCopy = "https://www.youtube.com/watch?v=oRqJ0EFXmgo";
-    try{
-        await navigator.clipboard.writeText(textToCopy);
-        alert('Link copied to clipboard!');
-    }catch(e){
-        alert('Could not copy – fallback: ' + textToCopy);
-    }
-});
-
-discordBtn.addEventListener('click', ()=>{
-    alert('discord doesn\'t support profile links, message me instead @squidard (my discord user)');
-});
-
-minimizeBtn.addEventListener('click', ()=>{
-    mainWindow.classList.add('minimized');
-    setTimeout(()=>{
-        easterEgg.classList.add('show');
-    }, 100);
-    setTimeout(()=>{
-        easterEgg.classList.remove('show');
-        setTimeout(()=>{
-            mainWindow.classList.remove('minimized');
-        }, 300);
-    }, 3000);
-});
-
-maximizeBtn.addEventListener('click', ()=>{
-    mainWindow.classList.toggle('maximized');
-});
-
-closeBtn.addEventListener('click', ()=>{
-    window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
-});
-
-helpBtn.addEventListener('click', ()=>{
-    window.location.href = 'https://github.com/90icetea/intro';
-});
-
-logoutBtn.addEventListener('click', ()=>{
-    alert('log out...???');
-});
-
-tabs.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-        tabs.forEach(t=> t.classList.remove('active'));
-        btn.classList.add('active');
-        const tabId = btn.getAttribute('data-tab');
-        tabContents.forEach(content => content.style.display = 'none');
-        document.getElementById(`${tabId}-tab`).style.display = 'flex';
-    });
-});
-
-updateUI();
-})();
-</script>
 </html>
