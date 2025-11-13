@@ -103,27 +103,6 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
 
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-            visibility: hidden;
-        }
-
-        .loading-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
         .loader {
             width: 60px;
             height: 60px;
@@ -896,7 +875,7 @@
             padding-top: 10px;
         }
 
-        .dninote {
+        .endnote {
             font-size: 12px;
             color: var(--muted);
             margin-top: 8px;
@@ -1545,13 +1524,9 @@
     </style>
 </head>
 <body data-lang="en">
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loader"></div>
-        <div class="loading-text" data-translate="loading">Loading...</div>
-    </div>
 
     <div class="easter-egg" id="easterEgg">
-        <img src="https://i.pinimg.com/736x/8a/08/11/8a0811e8e381e8cbb4d49d7b890b3de5.jpg" alt="You found the secret!"/>
+        <img src="assets/blehhh.jpg" alt="hello there"/>
     </div>
 
     <div class="window" id="mainWindow">
@@ -1676,7 +1651,7 @@
                     </div>
                     <div class="note">
                         <strong data-translate="thanks">thanks for visiting!!!</strong>
-                        <div class="dninote"><strong>FYI:</strong> <span data-translate="fyi">i didn't fully make this</span></div>
+                        <div class="endnote"><strong>FYI:</strong> <span data-translate="fyi">i didn't fully make this</span></div>
                     </div>
                 </section>
             </div>
@@ -1743,7 +1718,7 @@
                         </div>
                     </a>
                     <a href="https://www.roblox.com/games/118579241387230/forgotten" target="_blank" class="portfolio-item">
-                        <div class="portfolio-image img-loading" style="background-image:url('assets/robloxuniform.png')"></div>
+                        <div class="portfolio-image img-loading" style="background-image:url('assets/robloxschool.png')"></div>
                         <div class="portfolio-desc">
                             <h4 data-translate="project2-title">School Replica in Roblox</h4>
                             <p data-translate="project2-desc">a decently accurate replica of my school remade in Roblox, using Roblox Studio (work in progress).</p>
@@ -1812,7 +1787,7 @@
                     'interests-title': 'Interests',
                     'interests-text': 'video editing, motion graphics, python, cybersecurity, linux, photography, visual design',
                     aka: 'a.k.a',
-                    bio: 'script kiddie | fluent english and indonesian · interest in cybersecurity (redteam) · i use arch btw',
+                    bio: 'script kiddie | fluent english and indonesian · trying to learn programming · i use arch btw',
                     quote: '"Cogito, ergo sum." -René Descartes',
                     next: 'Next:',
                     'site-update-title': 'Site Update',
@@ -1849,7 +1824,7 @@
                     'blog3-preview': "Why I'm passionate about cybersecurity and the resources I'm using to learn..."
                 },
                 id: {
-                    loading: 'Memuat...',
+                    loading: 'Loading...',
                     'tab-main': 'Utama',
                     'tab-portfolio': 'Portofolio',
                     'tab-blog': 'Blog',
@@ -1859,7 +1834,7 @@
                     'interests-title': 'Minat',
                     'interests-text': 'video editing, motion graphics, python, cybersecurity, linux, fotografi, desain visual',
                     aka: 'alias',
-                    bio: 'script kiddie | fasih bahasa inggris dan indonesia · nyoba cybersecurity (redteam) · arch btw',
+                    bio: 'script kiddie | fasih bahasa inggris dan indonesia · belajar programming · arch btw',
                     quote: '"Cogito, ergo sum." -René Descartes',
                     next: 'Selanjutnya:',
                     'site-update-title': 'Update Website',
@@ -1923,8 +1898,9 @@ just improved almost everything on the site, here's what's new:
 
 ### ⚡ Performance
 - **better caching** - images load more efficiently
+- **compressed assets** - images load faster
 - **smoother scrolling** - improved scroll performance
-- **no bugs** - thankfully
+- **no bugs** - probably
 
 ### 🎨 Color Updates
 - info boxes now use darker background for better contrast
@@ -1969,9 +1945,10 @@ baru aja memperbarui hampir semuanya di website, ini yang baru:
 - **ganti bahasa** - untuk pengunjung luar negeri
 
 ### ⚡ Performa
-- **Caching lebih baik** - gambar dimuat lebih efisien
+- **caching lebih baik** - gambar dimuat lebih efisien
+- **kompresi aset** - gambar muncul lebih cepet
 - **scrolling lebih halus** - performa scroll ditingkatkan
-- **tanpa bug** - alhamdulillah
+- **tanpa bug** - insyallah
 
 ### 🎨 Pembaruan Warna
 - kotak info sekarang menggunakan latar belakang lebih gelap untuk kontras yang lebih baik
@@ -1998,7 +1975,7 @@ terima kasih telah berkunjung dan memeriksa pembaruan
                     en: {
                         title: 'Learning After Effects',
                         date: 'August 6, 2025',
-                        image: 'https://i.ibb.co.com/z0DgjYD/image.png',
+                        image: 'https://i.ibb.co.com/0yPZQxkk/Comp-1-2-3.gif',
                         content: `
 # Alight Motion to After Effects
 
@@ -2096,7 +2073,7 @@ gif di atas adalah timelapseku - keliatan semua layer & efek yang kupake di dala
                     en: {
                         title: 'Building My Personal Website',
                         date: 'August 13, 2025',
-                        image: 'https://i.ibb.co.com/YGxrRCt/Screenshot-2025-08-13-011058.png',
+                        image: 'assets/oldoldsiteimage.png',
                         content: `
 # What is this?
 
@@ -2147,7 +2124,7 @@ got feedback? dm me on any of my socials
                     id: {
                         title: 'Membangun Situs Web Pribadi Saya',
                         date: '13 Agustus 2025',
-                        image: 'https://i.ibb.co.com/YGxrRCt/Screenshot-2025-08-13-011058.png',
+                        image: 'assets/oldoldsiteimage.png',
                         content: `
 # Ini Apaan?
 
@@ -2192,274 +2169,6 @@ hal-hal yang pengen aku tambahin:
 kalo kamu baca ini, makasih udah mampir ke situs-ku. silakan liat liat, kalo ketemu bug, 100% itu fitur
 
 punya masukan? dm aja
-`
-                    }
-                },
-                'cybersecurity': {
-                    en: {
-                        title: 'Getting Into Cybersecurity',
-                        date: 'October 15, 2025',
-                        image: 'https://i.ibb.co.com/BVJW0NvF/void.jpg',
-                        content: `
-# My Cybersecurity Journey
-
-**pecintacybersecurity999** isn't just a username - it represents my genuine passion for cybersecurity and ethical hacking.
-
-## How It Started
-
-My interest in cybersecurity began when I:
-- Accidentally broke my first Linux installation
-- Got curious about how systems work
-- Watched too many hacking movies (they're not realistic, but they're cool!)
-- Realized technology needs people to protect it
-
-## What I'm Learning
-
-### Current Focus Areas
-
-**1. Linux Fundamentals**
-- Command line mastery
-- System administration
-- I use Arch btw (had to say it)
-
-**2. Networking**
-- TCP/IP protocols
-- How data moves across the internet
-- Network security basics
-
-**3. Python for Security**
-\`\`\`python
-# Simple port scanner I wrote
-import socket
-
-def scan_port(host, port):
-    try:
-        sock = socket.socket()
-        sock.settimeout(1)
-        sock.connect((host, port))
-        return True
-    except:
-        return False
-\`\`\`
-
-### Tools I'm Learning
-
-- **Kali Linux** - The hacker's playground
-- **Wireshark** - Network analysis
-- **Metasploit** - Penetration testing framework
-- **Burp Suite** - Web application security
-
-## Resources I Recommend
-
-### Free Learning Platforms
-1. **TryHackMe** - Gamified learning (my favorite!)
-2. **HackTheBox** - Real-world scenarios
-3. **OverTheWire** - War games for learning
-4. **YouTube** - So many great channels
-
-### Books I'm Reading
-- "The Hacker Playbook" series
-- "Penetration Testing" by Georgia Weidman
-- Various online resources and documentation
-
-## Ethical Hacking
-
-> With great power comes great responsibility
-
-I can't stress this enough: **only hack systems you have permission to test**. Ethical hacking is about:
-- Protecting, not attacking
-- Finding vulnerabilities to fix them
-- Making the internet safer
-- Following responsible disclosure
-
-## My Goals
-
-### Short Term
-- [ ] Complete TryHackMe beginner path
-- [ ] Get comfortable with Linux
-- [ ] Learn more about web vulnerabilities
-- [ ] Build my own security tools
-
-### Long Term
-- [ ] Get security certifications (CEH, OSCP)
-- [ ] Participate in CTF competitions
-- [ ] Contribute to open source security projects
-- [ ] Maybe work in cybersecurity professionally
-
-## Challenges and Reality
-
-It's not all Hollywood hacking montages. Real cybersecurity is:
-- **Lots of reading** - Documentation is your friend
-- **Patient debugging** - Why isn't this exploit working?
-- **Continuous learning** - Technology changes fast
-- **Attention to detail** - Small mistakes = big problems
-
-## Why It Matters
-
-In today's digital world, cybersecurity is crucial:
-- Data breaches affect millions
-- Privacy is under constant threat
-- Critical infrastructure needs protection
-- Someone needs to be the good guys
-
-## Advice for Beginners
-
-Starting in cybersecurity? Here's my advice:
-
-1. **Learn the basics first** - Understand how things work normally before you try to break them
-2. **Practice legally** - Use CTF platforms and your own lab
-3. **Join communities** - Reddit, Discord, forums - ask questions!
-4. **Don't get discouraged** - It's complex, but rewarding
-5. **Stay curious** - Always ask "how does this work?"
-
-## My Setup
-
-Currently learning on:
-- **Arch Linux** (btw)
-- **VirtualBox** for testing
-- **Raspberry Pi** for projects
-- Various **cloud services** for practice
-
-## Final Thoughts
-
-Cybersecurity isn't just my interest - it's my passion. Every day I learn something new, every problem I solve makes me better, and every system I secure (in practice) makes me more confident.
-
-The field is challenging, constantly evolving, and absolutely fascinating. If you're interested in cybersecurity too, feel free to reach out. Let's learn together!
-
-*Stay curious, stay ethical, stay secure.* 🔒
-`
-                    },
-                    id: {
-                        title: 'Terjun ke Dunia Keamanan Siber',
-                        date: '15 Oktober 2025',
-                        image: 'https://i.ibb.co.com/BVJW0NvF/void.jpg',
-                        content: `
-# Perjalanan Keamanan Siber Saya
-
-**pecintacybersecurity999** bukan hanya nama pengguna - ini mewakili passion saya yang tulus untuk keamanan siber dan ethical hacking.
-
-## Bagaimana Ini Dimulai
-
-Minat saya pada keamanan siber dimulai ketika saya:
-- Secara tidak sengaja merusak instalasi Linux pertama saya
-- Menjadi penasaran tentang cara kerja sistem
-- Menonton terlalu banyak film hacking (mereka tidak realistis, tapi keren!)
-- Menyadari teknologi membutuhkan orang untuk melindunginya
-
-## Apa yang Saya Pelajari
-
-### Area Fokus Saat Ini
-
-**1. Fundamental Linux**
-- Penguasaan command line
-- Administrasi sistem
-- Saya pakai Arch btw (harus mengatakannya)
-
-**2. Jaringan**
-- Protokol TCP/IP
-- Bagaimana data bergerak melintasi internet
-- Dasar-dasar keamanan jaringan
-
-**3. Python untuk Keamanan**
-\`\`\`python
-# Port scanner sederhana yang saya tulis
-import socket
-
-def scan_port(host, port):
-    try:
-        sock = socket.socket()
-        sock.settimeout(1)
-        sock.connect((host, port))
-        return True
-    except:
-        return False
-\`\`\`
-
-### Alat yang Saya Pelajari
-
-- **Kali Linux** - Taman bermain hacker
-- **Wireshark** - Analisis jaringan
-- **Metasploit** - Framework pengujian penetrasi
-- **Burp Suite** - Keamanan aplikasi web
-
-## Sumber Daya yang Saya Rekomendasikan
-
-### Platform Pembelajaran Gratis
-1. **TryHackMe** - Pembelajaran gamifikasi (favorit saya!)
-2. **HackTheBox** - Skenario dunia nyata
-3. **OverTheWire** - War games untuk belajar
-4. **YouTube** - Begitu banyak saluran bagus
-
-### Buku yang Saya Baca
-- Seri "The Hacker Playbook"
-- "Penetration Testing" oleh Georgia Weidman
-- Berbagai sumber daya online dan dokumentasi
-
-## Ethical Hacking
-
-> Dengan kekuatan besar datang tanggung jawab besar
-
-Saya tidak bisa cukup menekankan ini: **hanya hack sistem yang Anda miliki izin untuk menguji**. Ethical hacking adalah tentang:
-- Melindungi, bukan menyerang
-- Menemukan kerentanan untuk memperbaikinya
-- Membuat internet lebih aman
-- Mengikuti pengungkapan yang bertanggung jawab
-
-## Tujuan Saya
-
-### Jangka Pendek
-- [ ] Menyelesaikan jalur pemula TryHackMe
-- [ ] Nyaman dengan Linux
-- [ ] Belajar lebih banyak tentang kerentanan web
-- [ ] Membangun alat keamanan saya sendiri
-
-### Jangka Panjang
-- [ ] Mendapatkan sertifikasi keamanan (CEH, OSCP)
-- [ ] Berpartisipasi dalam kompetisi CTF
-- [ ] Berkontribusi pada proyek keamanan open source
-- [ ] Mungkin bekerja di keamanan siber secara profesional
-
-## Tantangan dan Realitas
-
-Ini bukan semua montase hacking Hollywood. Keamanan siber nyata adalah:
-- **Banyak membaca** - Dokumentasi adalah teman Anda
-- **Debugging sabar** - Mengapa exploit ini tidak berfungsi?
-- **Pembelajaran berkelanjutan** - Teknologi berubah cepat
-- **Perhatian terhadap detail** - Kesalahan kecil = masalah besar
-
-## Mengapa Ini Penting
-
-Di dunia digital saat ini, keamanan siber sangat penting:
-- Pelanggaran data memengaruhi jutaan orang
-- Privasi berada di bawah ancaman konstan
-- Infrastruktur kritis membutuhkan perlindungan
-- Seseorang perlu menjadi orang baik
-
-## Saran untuk Pemula
-
-Memulai di keamanan siber? Berikut saran saya:
-
-1. **Pelajari dasar-dasarnya terlebih dahulu** - Pahami bagaimana hal-hal bekerja secara normal sebelum Anda mencoba merusaknya
-2. **Latihan secara legal** - Gunakan platform CTF dan lab Anda sendiri
-3. **Bergabunglah dengan komunitas** - Reddit, Discord, forum - ajukan pertanyaan!
-4. **Jangan berkecil hati** - Ini kompleks, tapi bermanfaat
-5. **Tetap penasaran** - Selalu tanya "bagaimana ini bekerja?"
-
-## Setup Saya
-
-Saat ini belajar di:
-- **Arch Linux** (btw)
-- **VirtualBox** untuk pengujian
-- **Raspberry Pi** untuk proyek
-- Berbagai **layanan cloud** untuk latihan
-
-## Pemikiran Akhir
-
-Keamanan siber bukan hanya minat saya - ini passion saya. Setiap hari saya belajar sesuatu yang baru, setiap masalah yang saya selesaikan membuat saya lebih baik, dan setiap sistem yang saya amankan (dalam latihan) membuat saya lebih percaya diri.
-
-Bidang ini menantang, terus berkembang, dan benar-benar menarik. Jika Anda juga tertarik dengan keamanan siber, jangan ragu untuk menghubungi. Mari belajar bersama!
-
-*Tetap penasaran, tetap etis, tetap aman.* 🔒
 `
                     }
                 }
@@ -2563,7 +2272,7 @@ Bidang ini menantang, terus berkembang, dan benar-benar menarik. Jika Anda juga 
                 });
             }
 
-            // Loading screen
+            // Image loading screen
             window.addEventListener('load', () => {
                 setupImageLoading();
                 setTimeout(() => {
