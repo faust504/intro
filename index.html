@@ -5,8 +5,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>faust!</title>
     <link rel="icon" 
-          type="image/png" 
-          href="assets/epicfavicon.webp">
+        type="image/png" 
+        href="assets/epicfavicon.webp">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
     <style>
@@ -1336,49 +1336,57 @@
                 flex-direction: column; 
             }
             
-            .left { 
-                width: 100%; 
-                order: 2; 
-            }
-            
-            .center { 
-                width: 100%; 
-                min-width: auto; 
-                order: 1; 
+
+            .left, 
+            .center, 
+            .media-row, 
+            .main-content-area {
+                display: contents; 
             }
 
-            .image-box-card {
-                width: 100%;
-                max-width: 100%;
+            /* 1. pfp/bio */
+            .avatar-row { order: 1; width: 100%; }
+            
+            /* 2. newest blog post (from .media-row -> .main-content-area) */
+            .panel-left { order: 2; width: 100%; }
+
+            /* 3. music player */
+            .playing { order: 3; width: 100%; } 
+            
+            /* 4. info boxes (from .media-row -> .main-content-area) */
+            .panel-right { 
+                order: 4; 
+                width: 100%; 
+                flex-direction: row; 
+                flex-wrap: wrap; 
+            } 
+            
+            /* 5. interests card (from .left) - moved under info boxes, above socials */
+            .card:has(.interests) { order: 5; width: 100%; } 
+
+            /* 6. socials card (from .left) */
+            .card:has(.find-list) { order: 6; width: 100%; } 
+            
+            
+            /* 7. image card (from .left) */
+            .image-box-card { 
+                order: 7; 
+                width: 100%; 
                 margin-bottom: 12px; 
             }
-            
-            .main-content-area { 
-                flex-direction: column; 
-            }
-            
-            .panel-right { 
-                width: 100%; 
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-            
-            .info-box {
-                flex: 1;
-                min-width: 200px;
-            }
-            
-            .portfolio-grid { 
-                grid-template-columns: 1fr; 
-            }
 
-            .blog-grid {
-                grid-template-columns: 1fr;
-            }
-            
+            /* 8. note - moved to the very bottom */
+            .note { order: 8; width: 100%; }
+
+            /* restore mobile specific flex behavior */
             .avatar-row { 
                 flex-direction: column; 
                 text-align: center; 
+            }
+            
+            /* remove main-content-area rules that conflict with display: contents */
+            .main-content-area {
+                /* display: flex; was set to display: contents now */
             }
             
             .avatar {
@@ -1582,7 +1590,7 @@
                         <div class="interests" data-translate="interests-text">video editing, motion graphics, python, cybersecurity, linux, photography, visual design</div>
                     </div>
                     <div class="card image-box-card img-loading">
-                        <img loading="lazy" alt="aesthetic" src="assets/imageundersocials.png" class="image-box-img"/>
+                        <img loading="lazy" alt="aesthetic" src="assets/imageundersocials.jpg" class="image-box-img"/>
                     </div>
                 </aside>
                 <section class="center">
@@ -1711,14 +1719,14 @@
                 <h2 style="margin:10px 0;font-size:20px;color:var(--accent);font-family:'Montserrat',sans-serif" data-translate="portfolio-heading">My Projects</h2>
                 <div class="portfolio-grid">
                     <a href="https://www.roblox.com/catalog/92115969258782/batik-spega" target="_blank" class="portfolio-item">
-                        <div loading="lazy" class="portfolio-image img-loading" style="background-image:url('assets/robloxuniform.png')"></div>
+                        <div loading="lazy" class="portfolio-image img-loading" style="background-image:url('assets/robloxuniform.jpg')"></div>
                         <div class="portfolio-desc">
                             <h4 data-translate="project1-title">School Uniform in Roblox</h4>
                             <p data-translate="project1-desc">a replica of my school's batik uniform in Roblox, by editing photos of the irl uniform. made some robux from it.</p>
                         </div>
                     </a>
                     <a href="https://www.roblox.com/games/118579241387230/forgotten" target="_blank" class="portfolio-item">
-                        <div loading="lazy" class="portfolio-image img-loading" style="background-image:url('assets/robloxschool.png')"></div>
+                        <div loading="lazy" class="portfolio-image img-loading" style="background-image:url('assets/robloxschool.jpg')"></div>
                         <div class="portfolio-desc">
                             <h4 data-translate="project2-title">School Replica in Roblox</h4>
                             <p data-translate="project2-desc">a decently accurate replica of my school remade in Roblox, using Roblox Studio (work in progress).</p>
